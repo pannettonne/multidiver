@@ -1,0 +1,1231 @@
+
+<\!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🏴\u200D☠️ Isla del Tesoro - Juego de Multiplicaciones</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ocean-deep: #0a2342;
+  --ocean-mid: #1a4a7a;
+  --ocean-light: #2e7eb8;
+  --ocean-surf: #5bb8f5;
+  --ocean-foam: #c8eeff;
+  --gold: #ffd700;
+  --gold-dark: #c8a000;
+  --gold-light: #fff3a0;
+  --sand: #f5e6c8;
+  --sand-dark: #d4b896;
+  --treasure: #ff6b35;
+  --treasure-dark: #cc4400;
+  --green-island: #2ecc71;
+  --green-dark: #1a8a4a;
+  --danger: #e74c3c;
+  --white: #ffffff;
+  --shadow: rgba(0,0,0,0.3);
+  --radius: 16px;
+  --radius-sm: 8px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body {
+  width:100:root {
+  --ocean-deep: #0a2342;
+  --ocean-mid: #1a4a7a;
+  --ocean-light: #2e7eb8;
+  --ocean-surf: #5bb8f5;
+  --ocean-foam: #c8eeff;
+  --gold: #ffd700;
+  --gold-dark: #c8a000;
+  --gold-light: #fff3a0;
+  --sand: #f5e6c8;
+  --sand-dark: #d4b896;
+  --treasure: #ff6b35;
+  --treasure-dark: #cc4400;
+  --green-island: #2ecc71;
+  --green-dark: #1a8a4a;
+  --danger: #e74c3c;
+  --white: #ffffff;
+  --shadow: rgba(0,0,0,0.3);
+  --radius: 16px;
+  --radius-sm: 8px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body {
+  width:100%; height:100%;
+  font-family: "Nunito", sans-serif;
+  overflow:hidden;
+  background: var(--ocean-deep);
+}
+#app {
+  width:100%; height:100%;
+  position:relative;
+  overflow:hidden;
+}
+.screen {
+  position:absolute; inset:0;
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  overflow-y:auto;
+  overflow-x:hidden;
+}
+.screen.active { display:flex; }
+
+/* ---- SPLASH ---- */
+#s-splash {
+  background: linear-gradient(160deg, var(--ocean-deep) 0%, var(--ocean-mid) 50%, var(--ocean-light) 100%);
+  justify-content:center;
+  padding:40px 20px;
+}
+.splash-ship {
+  font-size:80px;
+  animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4));
+}
+.splash-title {
+  font-family: "Fredoka One", cursive;
+  font-size:clamp(2rem, 8vw, 4rem);
+  color: var(--gold);
+  text-shadow: 3px 3px 0 var(--gold-dark), 0 0 30px rgba(255,215,0,0.5);
+  margin:16px 0 8px;
+  text-align:center;
+}
+.splash-subtitle {
+  color: var(--ocean-foam);
+  font-size:clamp(1rem, 3vw, 1.3rem);
+  font-weight:700;
+  text-align:center;
+  margin-bottom:40px;
+}
+.splash-waves {
+  position:absolute; bottom:0; left:0; right:0;
+  height:120px;
+  background: linear-gradient(transparent, var(--ocean-deep));
+  pointer-events:none;
+}
+/* ---- BUTTONS ---- */
+.btn {
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  padding:14px 28px;
+  border:none; border-radius:50px;
+  font-family:"Nunito", sans-serif;
+  font-size:1.1rem; font-weight:800;
+  cursor:pointer;
+  transition: transform 0.1s, box-shadow 0.1s;
+  position:relative;
+  text-decoration:none;
+  user-select:none;
+}
+.btn:active { transform:translateY(3px); }
+.btn-gold {
+  background: linear-gradient(135deg, var(--gold) 0%, #ffb300 100%);
+  color: var(--ocean-deep);
+  box-shadow: 0 6px 0 var(--gold-dark), 0 8px 16px var(--shadow);
+}
+.btn-gold:active { box-shadow: 0 3px 0 var(--gold-dark), 0 4px 8px var(--shadow); }
+.btn-ocean {
+  background: linear-gradient(135deg, var(--ocean-light) 0%, var(--ocean-mid) 100%);
+  color: var(--white);
+  box-shadow: 0 6px 0 #0d3060, 0 8px 16px var(--shadow);
+}
+.btn-ocean:active { box-shadow: 0 3px 0 #0d3060, 0 4px 8px var(--shadow); }
+.btn-treasure {
+  background: linear-gradient(135deg, var(--treasure) 0%, #e05000 100%);
+  color: var(--white);
+  box-shadow: 0 6px 0 var(--treasure-dark), 0 8px 16px var(--shadow);
+}
+.btn-treasure:active { box-shadow: 0 3px 0 var(--treasure-dark), 0 4px 8px var(--shadow); }
+.btn-green {
+  background: linear-gradient(135deg, var(--green-island) 0%, #27ae60 100%);
+  color: var(--white);
+  box-shadow: 0 6px 0 var(--green-dark), 0 8px 16px var(--shadow);
+}
+.btn-green:active { box-shadow: 0 3px 0 var(--green-dark), 0 4px 8px var(--shadow); }
+.btn-lg { padding:18px 40px; font-size:1.3rem; }
+.btn-sm { padding:10px 20px; font-size:0.95rem; }
+.btn-block { width:100%; }
+/* ---- NAME SCREEN ---- */
+#s-name {
+  background: linear-gradient(160deg, var(--ocean-mid) 0%, var(--ocean-deep) 100%);
+  justify-content:center;
+  padding:40px 20px;
+}
+.name-card {
+  background: rgba(255,255,255,0.1);
+  backdrop-filter: blur(10px);
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: var(--radius);
+  padding:40px 32px;
+  max-width:440px; width:100%;
+  text-align:center;
+}
+.name-card h2 {
+  font-family:"Fredoka One", cursive;
+  color: var(--gold);
+  font-size:1.8rem;
+  margin:16px 0 8px;
+}
+.name-card p { color: var(--ocean-foam); margin-bottom:24px; }
+.input-field {
+  width:100%; padding:14px 18px;
+  border:3px solid var(--ocean-surf);
+  border-radius:50px;
+  font-family:"Nunito", sans-serif;
+  font-size:1.2rem; font-weight:700;
+  text-align:center;
+  background: rgba(255,255,255,0.9);
+  color: var(--ocean-deep);
+  outline:none;
+  margin-bottom:20px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.input-field:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 4px rgba(255,215,0,0.3);
+}
+
+/* ---- MAP SCREEN ---- */
+#s-map {
+  background: linear-gradient(160deg, var(--ocean-deep) 0%, var(--ocean-mid) 100%);
+  padding-bottom:40px;
+}
+.map-header {
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(10px);
+  padding:16px 20px;
+  width:100%;
+  display:flex; align-items:center; gap:12px;
+  position:sticky; top:0; z-index:10;
+  border-bottom: 2px solid rgba(255,255,255,0.1);
+}
+.player-avatar {
+  width:44px; height:44px;
+  background: var(--gold);
+  border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:22px;
+  box-shadow: 0 3px 10px var(--shadow);
+}
+.player-name {
+  font-family:"Fredoka One", cursive;
+  color: var(--gold);
+  font-size:1.2rem;
+  flex:1;
+}
+.stat-chip {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius:20px;
+  padding:6px 12px;
+  color: var(--white);
+  font-weight:700;
+  font-size:0.9rem;
+  display:flex; align-items:center; gap:4px;
+}
+.map-title {
+  font-family:"Fredoka One", cursive;
+  color: var(--gold);
+  font-size:1.5rem;
+  text-align:center;
+  padding:20px 20px 8px;
+  text-shadow: 2px 2px 0 var(--gold-dark);
+}
+.islands-grid {
+  display:grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap:16px;
+  padding:16px 20px;
+  width:100%; max-width:900px;
+  margin:0 auto;
+}
+@media(min-width:600px) { .islands-grid { grid-template-columns: repeat(3,1fr); } }
+@media(min-width:900px) { .islands-grid { grid-template-columns: repeat(5,1fr); } }
+
+.island-card {
+  background: rgba(255,255,255,0.08);
+  border: 2px solid rgba(255,255,255,0.15);
+  border-radius: var(--radius);
+  padding:16px 10px;
+  text-align:center;
+  cursor:pointer;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
+  position:relative;
+  overflow:hidden;
+}
+.island-card:hover {
+  transform:translateY(-4px);
+  background: rgba(255,255,255,0.15);
+  box-shadow: 0 8px 24px var(--shadow);
+}
+.island-card.locked { opacity:0.5; cursor:not-allowed; filter:grayscale(0.6); }
+.island-card.completed { border-color: var(--gold); }
+.island-card .island-emoji { font-size:2.4rem; display:block; margin-bottom:6px; animation: float 3s ease-in-out infinite; }
+.island-card .island-num {
+  font-family:"Fredoka One", cursive;
+  font-size:1.4rem;
+  color: var(--white);
+}
+.island-card .island-name { font-size:0.78rem; color: var(--ocean-foam); font-weight:700; margin:2px 0 6px; }
+.island-stars { display:flex; justify-content:center; gap:3px; }
+.star { font-size:1rem; }
+.lock-icon { position:absolute; top:8px; right:8px; font-size:1rem; opacity:0.7; }
+/* ---- ISLAND DETAIL ---- */
+#s-island {
+  background: linear-gradient(160deg, var(--ocean-mid) 0%, var(--ocean-deep) 100%);
+  padding-bottom:40px;
+}
+.island-hero {
+  width:100%;
+  padding:40px 20px 30px;
+  text-align:center;
+  position:relative;
+}
+.island-hero-emoji { font-size:72px; animation: float 3s ease-in-out infinite; filter: drop-shadow(0 8px 16px rgba(0,0,0,0.4)); }
+.island-hero-name {
+  font-family:"Fredoka One", cursive;
+  color: var(--gold);
+  font-size:2rem;
+  margin:12px 0 4px;
+  text-shadow: 2px 2px 0 var(--gold-dark);
+}
+.island-hero-stars { font-size:1.5rem; margin-bottom:16px; }
+.story-box {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: var(--radius);
+  padding:16px 20px;
+  margin:0 20px 16px;
+  color: var(--ocean-foam);
+  font-size:0.95rem;
+  line-height:1.6;
+  max-width:600px;
+  margin-left:auto; margin-right:auto;
+}
+.tip-box {
+  background: rgba(255,215,0,0.15);
+  border: 2px solid rgba(255,215,0,0.4);
+  border-radius: var(--radius);
+  padding:14px 20px;
+  margin:0 20px 24px;
+  color: var(--gold-light);
+  font-size:0.92rem;
+  font-weight:700;
+  max-width:600px;
+  margin-left:auto; margin-right:auto;
+}
+.tip-box span { font-size:1.1rem; }
+.activity-buttons {
+  display:flex; flex-direction:column; gap:12px;
+  padding:0 20px;
+  max-width:440px;
+  margin:0 auto;
+}
+.back-btn {
+  position:absolute; top:16px; left:16px;
+  background: rgba(255,255,255,0.15);
+  border:none; border-radius:50%;
+  width:40px; height:40px;
+  font-size:1.2rem;
+  cursor:pointer;
+  color:var(--white);
+  display:flex; align-items:center; justify-content:center;
+  transition: background 0.2s;
+}
+.back-btn:hover { background: rgba(255,255,255,0.25); }
+/* ---- LEARN SCREEN ---- */
+#s-learn {
+  background: linear-gradient(160deg, var(--ocean-deep) 0%, #0d3060 100%);
+  justify-content:center;
+  padding:30px 20px;
+}
+.learn-card {
+  background: rgba(255,255,255,0.1);
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: var(--radius);
+  padding:32px 28px;
+  max-width:500px; width:100%;
+  text-align:center;
+}
+.learn-title {
+  font-family:"Fredoka One", cursive;
+  color: var(--gold);
+  font-size:1.5rem;
+  margin-bottom:20px;
+}
+.fact-equation {
+  font-family:"Fredoka One", cursive;
+  font-size:clamp(2.5rem,10vw,4rem);
+  color: var(--white);
+  background: rgba(0,0,0,0.3);
+  border-radius: var(--radius);
+  padding:24px;
+  margin-bottom:20px;
+  text-shadow: 2px 2px 0 rgba(0,0,0,0.3);
+}
+.fact-visual {
+  font-size:2rem;
+  line-height:2;
+  min-height:80px;
+  background: rgba(0,0,0,0.2);
+  border-radius: var(--radius-sm);
+  padding:12px;
+  margin-bottom:20px;
+  letter-spacing:4px;
+}
+.fact-nav {
+  display:flex; gap:12px; justify-content:center; margin-top:20px;
+}
+
+/* ---- QUIZ SCREEN ---- */
+#s-quiz {
+  background: linear-gradient(160deg, var(--ocean-deep) 0%, #0d3060 100%);
+  padding:20px;
+  justify-content:flex-start;
+}
+.quiz-header {
+  width:100%; max-width:600px;
+  margin:0 auto 20px;
+}
+.progress-bar-wrap {
+  background: rgba(255,255,255,0.1);
+  border-radius:50px;
+  height:12px;
+  overflow:hidden;
+  margin-bottom:10px;
+}
+.progress-bar-fill {
+  height:100%;
+  background: linear-gradient(90deg, var(--gold) 0%, var(--treasure) 100%);
+  border-radius:50px;
+  transition: width 0.4s ease;
+}
+.quiz-meta {
+  display:flex; justify-content:space-between;
+  color: var(--ocean-foam);
+  font-size:0.9rem; font-weight:700;
+}
+.quiz-question-card {
+  background: rgba(255,255,255,0.1);
+  border: 2px solid rgba(255,255,255,0.2);
+  border-radius: var(--radius);
+  padding:28px 24px;
+  text-align:center;
+  max-width:600px; width:100%;
+  margin:0 auto 20px;
+}
+.quiz-island-emoji { font-size:2.5rem; margin-bottom:8px; }
+.quiz-question {
+  font-family:"Fredoka One", cursive;
+  font-size:clamp(2rem,8vw,3.5rem);
+  color: var(--white);
+}
+.quiz-sub { color: var(--ocean-foam); font-size:0.95rem; margin-top:8px; }
+.answer-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  max-width:600px; width:100%;
+  margin:0 auto;
+}
+.answer-btn {
+  background: rgba(255,255,255,0.12);
+  border: 3px solid rgba(255,255,255,0.2);
+  border-radius: var(--radius);
+  padding:20px 10px;
+  font-family:"Fredoka One", cursive;
+  font-size:clamp(1.5rem,5vw,2rem);
+  color: var(--white);
+  cursor:pointer;
+  transition: transform 0.15s, background 0.15s, border-color 0.15s;
+}
+.answer-btn:hover { background: rgba(255,255,255,0.22); transform:scale(1.03); }
+.answer-btn.correct { background: rgba(46,204,113,0.4); border-color: var(--green-island); animation: pop 0.4s ease; }
+.answer-btn.wrong { background: rgba(231,76,60,0.4); border-color: var(--danger); animation: shake 0.4s ease; }
+.answer-btn:disabled { cursor:default; }
+
+/* ---- VICTORY SCREEN ---- */
+#s-victory {
+  background: linear-gradient(160deg, #1a0a42 0%, var(--ocean-mid) 100%);
+  justify-content:center;
+  padding:30px 20px;
+  text-align:center;
+}
+.victory-stars { font-size:4rem; animation: bounce 0.8s ease infinite alternate; margin-bottom:8px; }
+.victory-title {
+  font-family:"Fredoka One", cursive;
+  font-size:clamp(2rem,8vw,3rem);
+  color: var(--gold);
+  text-shadow: 3px 3px 0 var(--gold-dark);
+  margin-bottom:8px;
+}
+.victory-subtitle { color: var(--ocean-foam); font-size:1.1rem; margin-bottom:24px; }
+.score-card {
+  background: rgba(255,215,0,0.15);
+  border: 2px solid rgba(255,215,0,0.4);
+  border-radius: var(--radius);
+  padding:20px 28px;
+  margin-bottom:20px;
+  max-width:400px; width:100%;
+}
+.score-big {
+  font-family:"Fredoka One", cursive;
+  font-size:3rem;
+  color: var(--gold);
+}
+.score-label { color: var(--gold-light); font-weight:700; }
+.prize-card {
+  background: rgba(255,255,255,0.1);
+  border: 2px solid rgba(255,255,255,0.25);
+  border-radius: var(--radius);
+  padding:20px 28px;
+  margin-bottom:24px;
+  max-width:400px; width:100%;
+}
+.prize-card h3 { color: var(--gold); font-family:"Fredoka One", cursive; font-size:1.3rem; margin-bottom:8px; }
+.prize-emoji { font-size:3rem; animation: star-pop 0.6s ease; }
+.prize-name { color: var(--white); font-weight:700; margin-top:8px; }
+/* ---- PRIZES SCREEN ---- */
+#s-prizes {
+  background: linear-gradient(160deg, var(--ocean-deep) 0%, var(--ocean-mid) 100%);
+  padding-bottom:40px;
+}
+.prizes-header {
+  background: rgba(0,0,0,0.3);
+  padding:16px 20px;
+  width:100%;
+  display:flex; align-items:center; gap:12px;
+  position:sticky; top:0; z-index:10;
+}
+.prizes-header h2 {
+  font-family:"Fredoka One", cursive;
+  color: var(--gold);
+  font-size:1.4rem;
+  flex:1;
+}
+.stats-row {
+  display:flex; gap:12px; flex-wrap:wrap; justify-content:center;
+  padding:16px 20px;
+}
+.stat-box {
+  background: rgba(255,255,255,0.1);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: var(--radius);
+  padding:14px 20px;
+  text-align:center;
+  flex:1; min-width:100px;
+}
+.stat-box .stat-val {
+  font-family:"Fredoka One", cursive;
+  font-size:2rem;
+  color: var(--gold);
+}
+.stat-box .stat-lbl { color: var(--ocean-foam); font-size:0.85rem; font-weight:700; }
+.badges-grid {
+  display:grid;
+  grid-template-columns: repeat(3,1fr);
+  gap:14px;
+  padding:8px 20px;
+  max-width:700px;
+  margin:0 auto;
+}
+@media(min-width:600px) { .badges-grid { grid-template-columns: repeat(4,1fr); } }
+.badge-card {
+  background: rgba(255,255,255,0.08);
+  border: 2px solid rgba(255,255,255,0.15);
+  border-radius: var(--radius);
+  padding:16px 10px;
+  text-align:center;
+  transition: transform 0.2s;
+}
+.badge-card:hover { transform:scale(1.05); }
+.badge-card.earned { border-color: var(--gold); background: rgba(255,215,0,0.1); }
+.badge-card.locked-badge { filter:grayscale(1); opacity:0.4; }
+.badge-emoji { font-size:2.2rem; }
+.badge-name { font-size:0.78rem; color: var(--ocean-foam); font-weight:700; margin-top:6px; }
+.badge-card.earned .badge-name { color: var(--gold-light); }
+/* ---- ANIMATIONS ---- */
+@keyframes float {
+  0%,100% { transform:translateY(0); }
+  50% { transform:translateY(-12px); }
+}
+@keyframes bounce {
+  0% { transform:scale(1) translateY(0); }
+  100% { transform:scale(1.15) translateY(-8px); }
+}
+@keyframes pop {
+  0% { transform:scale(1); }
+  50% { transform:scale(1.15); }
+  100% { transform:scale(1); }
+}
+@keyframes shake {
+  0%,100% { transform:translateX(0); }
+  20% { transform:translateX(-8px); }
+  40% { transform:translateX(8px); }
+  60% { transform:translateX(-6px); }
+  80% { transform:translateX(6px); }
+}
+@keyframes star-pop {
+  0% { transform:scale(0) rotate(-30deg); opacity:0; }
+  60% { transform:scale(1.3) rotate(10deg); opacity:1; }
+  100% { transform:scale(1) rotate(0deg); }
+}
+@keyframes fadeSlideUp {
+  from { opacity:0; transform:translateY(20px); }
+  to { opacity:1; transform:translateY(0); }
+}
+.anim-slide { animation: fadeSlideUp 0.4s ease both; }
+
+/* ---- TOAST ---- */
+#toast {
+  position:fixed; bottom:24px; left:50%;
+  transform:translateX(-50%) translateY(80px);
+  background: rgba(0,0,0,0.85);
+  color: var(--white);
+  padding:12px 24px;
+  border-radius:50px;
+  font-weight:700; font-size:1rem;
+  z-index:1000;
+  transition: transform 0.3s ease;
+  pointer-events:none;
+  white-space:nowrap;
+}
+#toast.show { transform:translateX(-50%) translateY(0); }
+
+/* ---- CONFETTI CANVAS ---- */
+#confetti-canvas {
+  position:fixed; inset:0;
+  pointer-events:none;
+  z-index:500;
+}
+
+/* ---- SCROLLBAR ---- */
+.screen::-webkit-scrollbar { width:6px; }
+.screen::-webkit-scrollbar-track { background:transparent; }
+.screen::-webkit-scrollbar-thumb { background:rgba(255,255,255,0.2); border-radius:3px; }
+</style>
+</head>
+<body>
+<canvas id="confetti-canvas"></canvas>
+<div id="toast"></div>
+<div id="app">
+
+<!-- SPLASH -->
+<div class="screen active" id="s-splash">
+  <div class="splash-ship">⛵</div>
+  <h1 class="splash-title">🏴‍☠️ Isla del Tesoro</h1>
+  <p class="splash-subtitle">¡El juego de multiplicaciones más épico!</p>
+  <div style="display:flex;flex-direction:column;gap:14px;width:100%;max-width:320px;">
+    <button class="btn btn-gold btn-lg btn-block" onclick="startNew()">⚓ Nueva Aventura</button>
+    <button class="btn btn-ocean btn-lg btn-block" id="btn-continue" onclick="continueGame()">🗺️ Continuar</button>
+  </div>
+  <div class="splash-waves"></div>
+</div>
+
+<!-- NAME -->
+<div class="screen" id="s-name">
+  <div class="name-card anim-slide">
+    <div style="font-size:64px;animation:float 3s ease-in-out infinite">🦜</div>
+    <h2>¿Cómo te llamas, pirata?</h2>
+    <p>Escribe tu nombre para comenzar la aventura</p>
+    <input type="text" id="player-name-input" class="input-field" placeholder="Tu nombre..." maxlength="20" autocomplete="off">
+    <button class="btn btn-gold btn-lg btn-block" onclick="saveName()">⚔️ ¡Zarpar!</button>
+  </div>
+</div>
+<!-- MAP -->
+<div class="screen" id="s-map">
+  <div class="map-header">
+    <div class="player-avatar">🏴‍☠️</div>
+    <div class="player-name" id="map-player-name">Pirata</div>
+    <div class="stat-chip">⭐ <span id="map-total-stars">0</span></div>
+    <div class="stat-chip">🔥 <span id="map-streak">0</span></div>
+    <button class="btn btn-sm btn-gold" onclick="go('s-prizes')">🏆</button>
+  </div>
+  <div class="map-title">🗺️ Elige tu Isla</div>
+  <div class="islands-grid" id="islands-grid"></div>
+</div>
+
+<!-- ISLAND DETAIL -->
+<div class="screen" id="s-island">
+  <div class="island-hero">
+    <button class="back-btn" onclick="go('s-map')">←</button>
+    <div class="island-hero-emoji" id="island-hero-emoji">🏝️</div>
+    <div class="island-hero-name" id="island-hero-name">Isla</div>
+    <div class="island-hero-stars" id="island-hero-stars">☆☆☆</div>
+  </div>
+  <div class="story-box" id="island-story"></div>
+  <div class="tip-box" id="island-tip"></div>
+  <div class="activity-buttons">
+    <button class="btn btn-green btn-lg btn-block" onclick="startLearn()">📖 Aprender</button>
+    <button class="btn btn-ocean btn-lg btn-block" onclick="startQuiz('practice')">⚓ Practicar</button>
+    <button class="btn btn-treasure btn-lg btn-block" onclick="startQuiz('challenge')">💀 Reto Final</button>
+  </div>
+</div>
+
+<!-- LEARN -->
+<div class="screen" id="s-learn">
+  <div class="learn-card anim-slide">
+    <div class="learn-title" id="learn-title">Tabla del 1</div>
+    <div class="fact-equation" id="fact-equation">1 × 1 = 1</div>
+    <div class="fact-visual" id="fact-visual">🌟</div>
+    <div class="fact-nav">
+      <button class="btn btn-ocean" onclick="prevFact()">← Anterior</button>
+      <span style="color:var(--ocean-foam);font-weight:700;align-self:center" id="fact-counter">1/10</span>
+      <button class="btn btn-ocean" onclick="nextFact()">Siguiente →</button>
+    </div>
+    <div style="margin-top:16px;display:flex;gap:10px;justify-content:center;">
+      <button class="btn btn-gold" onclick="go('s-island')">🗺️ Volver</button>
+      <button class="btn btn-treasure" onclick="startQuiz('practice')">⚓ Practicar</button>
+    </div>
+  </div>
+</div>
+<!-- QUIZ -->
+<div class="screen" id="s-quiz">
+  <div class="quiz-header">
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" id="quiz-progress" style="width:0%"></div>
+    </div>
+    <div class="quiz-meta">
+      <span id="quiz-counter">1 / 10</span>
+      <span id="quiz-score-live">⭐ 0</span>
+    </div>
+  </div>
+  <div class="quiz-question-card">
+    <div class="quiz-island-emoji" id="quiz-island-emoji">🏝️</div>
+    <div class="quiz-question" id="quiz-question">? × ? = ?</div>
+    <div class="quiz-sub" id="quiz-sub"></div>
+  </div>
+  <div class="answer-grid" id="answer-grid"></div>
+</div>
+
+<!-- VICTORY -->
+<div class="screen" id="s-victory">
+  <div class="victory-stars" id="victory-stars">⭐⭐⭐</div>
+  <div class="victory-title" id="victory-title">¡Increíble!</div>
+  <div class="victory-subtitle" id="victory-subtitle">Has conquistado la isla</div>
+  <div class="score-card">
+    <div class="score-big" id="victory-score">10</div>
+    <div class="score-label">puntos ganados</div>
+  </div>
+  <div class="prize-card" id="prize-card" style="display:none">
+    <h3>🎁 ¡Premio Desbloqueado!</h3>
+    <div class="prize-emoji" id="prize-emoji"></div>
+    <div class="prize-name" id="prize-name"></div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:12px;width:100%;max-width:340px;">
+    <button class="btn btn-gold btn-lg btn-block" onclick="go('s-island')">🔄 Intentar de nuevo</button>
+    <button class="btn btn-ocean btn-lg btn-block" onclick="go('s-map')">🗺️ Ver mapa</button>
+    <button class="btn btn-treasure btn-lg btn-block" onclick="go('s-prizes')">🏆 Mis premios</button>
+  </div>
+</div>
+
+<!-- PRIZES -->
+<div class="screen" id="s-prizes">
+  <div class="prizes-header">
+    <button class="back-btn" style="position:relative;top:0;left:0" onclick="go('s-map')">←</button>
+    <h2>🏆 Sala de Trofeos</h2>
+  </div>
+  <div class="stats-row">
+    <div class="stat-box"><div class="stat-val" id="ps-stars">0</div><div class="stat-lbl">⭐ Estrellas</div></div>
+    <div class="stat-box"><div class="stat-val" id="ps-islands">0</div><div class="stat-lbl">🏝️ Islas</div></div>
+    <div class="stat-box"><div class="stat-val" id="ps-streak">0</div><div class="stat-lbl">🔥 Racha</div></div>
+    <div class="stat-box"><div class="stat-val" id="ps-badges">0</div><div class="stat-lbl">🏅 Medallas</div></div>
+  </div>
+  <div style="padding:0 20px 12px;color:var(--gold);font-family:'Fredoka One',cursive;font-size:1.2rem;text-align:center;">Colección de Medallas</div>
+  <div class="badges-grid" id="badges-grid"></div>
+</div>
+
+</div><!-- /app -->
+<script>
+// ============================================================
+// DATA
+// ============================================================
+const ISLANDS = [
+  { id:1, name:"Isla Serpiente",   emoji:"🐍", color:"#2e7d32", story:"La serpiente Siri vive aquí. Ella dice que la tabla del 1 es mágica: ¡todo número multiplicado por 1 sigue siendo él mismo!", tip:"💡 Cualquier número × 1 = ese mismo número." },
+  { id:2, name:"Isla Paloma",      emoji:"🕊️", color:"#1565c0", story:"Las palomas vuelan en pares. La tabla del 2 duplica todo: es como tener el doble de tesoros.", tip:"💡 Multiplicar por 2 es sumar el número consigo mismo." },
+  { id:3, name:"Isla Tridente",    emoji:"🔱", color:"#6a1b9a", story:"El rey Neptuno ama los triángulos. La tabla del 3 esconde un secreto: suma los dígitos del resultado y siempre obtendrás 3, 6 ó 9.", tip:"💡 Truco: 3×n es n+n+n. ¡Suma tres veces!" },
+  { id:4, name:"Isla Diamante",    emoji:"💎", color:"#00838f", story:"Los diamantes tienen 4 caras. Multiplicar por 4 es doblar dos veces: primero ×2, luego ×2 otra vez.", tip:"💡 4×n = 2×(2×n). ¡Dobla y vuelve a doblar!" },
+  { id:5, name:"Isla Estrella",    emoji:"⭐", color:"#f57f17", story:"Las estrellas de 5 puntas iluminan el océano. La tabla del 5 siempre termina en 0 ó 5.", tip:"💡 Los resultados de ×5 siempre terminan en 0 o 5." },
+  { id:6, name:"Isla Volcán",      emoji:"🌋", color:"#bf360c", story:"El volcán Hexa tiene 6 cráteres. Tip: 6×n = 5×n + n. ¡Usa la tabla del 5 como trampolín!", tip:"💡 6×n = (5×n) + n. ¡Apóyate en el 5!" },
+  { id:7, name:"Isla Arcoíris",    emoji:"🌈", color:"#283593", story:"Siete colores pintan el cielo de esta isla. La tabla del 7 es la más aventurera, ¡hay que memorizarla!", tip:"💡 7×8=56 y 7×7=49. ¡Practica los más difíciles!" },
+  { id:8, name:"Isla del Pulpo",   emoji:"🐙", color:"#4527a0", story:"El pulpo Octo tiene 8 tentáculos. Multiplicar por 8 es doblar tres veces seguidas.", tip:"💡 8×n = 2×2×2×n. ¡Triplica el doble!" },
+  { id:9, name:"Isla Brújula",     emoji:"🧭", color:"#1b5e20", story:"La brújula siempre apunta al tesoro. Tabla del 9: los dígitos de cada resultado suman siempre 9.", tip:"💡 9×n: los dígitos suman 9. Ej: 9×4=36 → 3+6=9." },
+  { id:10, name:"Isla del Tesoro", emoji:"💰", color:"#e65100", story:"¡La isla legendaria! La tabla del 10 es la más sencilla: solo añade un cero al número.", tip:"💡 10×n = n seguido de un 0. ¡Fácil!" },
+];
+
+const PRIZES = [
+  { id:"p1",  emoji:"🦜", name:"Loro Pirata",         cond: s => s.totalStars >= 10  },
+  { id:"p2",  emoji:"⚓", name:"Ancla Dorada",         cond: s => s.totalStars >= 25  },
+  { id:"p3",  emoji:"🗺️", name:"Mapa Antiguo",         cond: s => s.islandsCompleted >= 3 },
+  { id:"p4",  emoji:"💎", name:"Diamante del Mar",     cond: s => s.islandsCompleted >= 5 },
+  { id:"p5",  emoji:"🔭", name:"Catalejo de Capitán",  cond: s => s.maxStreak >= 5   },
+  { id:"p6",  emoji:"🏴‍☠️", name:"Bandera Pirata",      cond: s => s.totalStars >= 50  },
+  { id:"p7",  emoji:"🐉", name:"Dragón del Océano",    cond: s => s.islandsCompleted >= 7 },
+  { id:"p8",  emoji:"👑", name:"Corona del Rey",       cond: s => s.maxStreak >= 10  },
+  { id:"p9",  emoji:"🌟", name:"Estrella Legendaria",  cond: s => s.totalStars >= 100 },
+  { id:"p10", emoji:"⚔️", name:"Espada del Tesoro",    cond: s => s.islandsCompleted >= 9 },
+  { id:"p11", emoji:"🏆", name:"Trofeo Supremo",       cond: s => s.islandsCompleted >= 10 },
+];
+</script>
+<script>
+// ============================================================
+// STATE
+// ============================================================
+const SAVE_KEY = 'itg_v3';
+let state = {
+  playerName: '',
+  totalStars: 0,
+  streak: 0,
+  maxStreak: 0,
+  islandsCompleted: 0,
+  islands: {},   // { 1: { stars:0, bestScore:0 }, ... }
+  prizes: [],    // earned prize ids
+};
+
+function loadState() {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (raw) state = Object.assign(state, JSON.parse(raw));
+  } catch(e) {}
+}
+
+function saveState() {
+  localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+}
+
+function getIslandState(id) {
+  if (!state.islands[id]) state.islands[id] = { stars:0, bestScore:0 };
+  return state.islands[id];
+}
+
+function isIslandUnlocked(id) {
+  if (id === 1) return true;
+  return getIslandState(id - 1).stars > 0;
+}
+
+function isIslandCompleted(id) {
+  return getIslandState(id).stars >= 3;
+}
+
+// ============================================================
+// NAVIGATION
+// ============================================================
+function go(screenId) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const target = document.getElementById(screenId);
+  if (target) {
+    target.classList.add('active');
+    target.scrollTop = 0;
+  }
+  if (screenId === 's-map') renderMap();
+  if (screenId === 's-prizes') renderPrizes();
+}
+
+// ============================================================
+// SPLASH + START
+// ============================================================
+function startNew() {
+  state = {
+    playerName: '',
+    totalStars: 0, streak: 0, maxStreak: 0, islandsCompleted: 0,
+    islands: {}, prizes: []
+  };
+  saveState();
+  go('s-name');
+  setTimeout(() => document.getElementById('player-name-input').focus(), 300);
+}
+
+function continueGame() {
+  if (!state.playerName) { showToast('No hay partida guardada 🦜'); return; }
+  go('s-map');
+}
+
+function saveName() {
+  const val = document.getElementById('player-name-input').value.trim();
+  if (!val) { showToast('¡Escribe tu nombre, pirata! 🦜'); return; }
+  state.playerName = val;
+  saveState();
+  go('s-map');
+}
+</script>
+<script>
+// ============================================================
+// MAP RENDER
+// ============================================================
+function renderMap() {
+  document.getElementById('map-player-name').textContent = state.playerName || 'Pirata';
+  document.getElementById('map-total-stars').textContent = state.totalStars;
+  document.getElementById('map-streak').textContent = state.streak;
+
+  const grid = document.getElementById('islands-grid');
+  grid.innerHTML = '';
+  ISLANDS.forEach(isl => {
+    const unlocked = isIslandUnlocked(isl.id);
+    const ist = getIslandState(isl.id);
+    const stars = ist.stars;
+    const card = document.createElement('div');
+    card.className = 'island-card' + (unlocked ? '' : ' locked') + (stars >= 3 ? ' completed' : '');
+    card.style.setProperty('--card-color', isl.color);
+    card.style.borderColor = stars >= 3 ? 'var(--gold)' : (unlocked ? 'rgba(255,255,255,0.25)' : '');
+    card.innerHTML =
+      '<span class="island-emoji">' + isl.emoji + '</span>' +
+      '<div class="island-num">×' + isl.id + '</div>' +
+      '<div class="island-name">' + isl.name + '</div>' +
+      '<div class="island-stars">' + renderStars(stars) + '</div>' +
+      (unlocked ? '' : '<span class="lock-icon">🔒</span>');
+    if (unlocked) {
+      card.onclick = () => openIsland(isl.id);
+    }
+    grid.appendChild(card);
+  });
+}
+
+function renderStars(count) {
+  let html = '';
+  for (let i = 1; i <= 3; i++) {
+    html += '<span class="star">' + (i <= count ? '⭐' : '☆') + '</span>';
+  }
+  return html;
+}
+
+// ============================================================
+// ISLAND DETAIL
+// ============================================================
+let currentIslandId = 1;
+
+function openIsland(id) {
+  currentIslandId = id;
+  const isl = ISLANDS[id - 1];
+  const ist = getIslandState(id);
+  document.getElementById('island-hero-emoji').textContent = isl.emoji;
+  document.getElementById('island-hero-name').textContent = isl.name;
+  document.getElementById('island-hero-stars').innerHTML = renderStars(ist.stars);
+  document.getElementById('island-story').textContent = isl.story;
+  document.getElementById('island-tip').innerHTML = '<span>' + isl.tip + '</span>';
+  go('s-island');
+}
+</script>
+<script>
+// ============================================================
+// LEARN MODE
+// ============================================================
+let learnIndex = 0;
+
+function startLearn() {
+  learnIndex = 0;
+  go('s-learn');
+  renderFact();
+}
+
+function getEmojisForIsland(id) {
+  const emojis = ['🌊','⭐','💎','🐚','🦀','🐠','🦞','🐡','🌴','💰'];
+  return emojis[id - 1] || '🌟';
+}
+
+function renderFact() {
+  const id = currentIslandId;
+  const isl = ISLANDS[id - 1];
+  const multiplier = learnIndex + 1;
+  const result = id * multiplier;
+  document.getElementById('learn-title').textContent = 'Tabla del ' + id + ' — ' + isl.name;
+  document.getElementById('fact-equation').textContent = id + ' × ' + multiplier + ' = ' + result;
+  document.getElementById('fact-counter').textContent = multiplier + ' / 10';
+  const emo = getEmojisForIsland(id);
+  let visual = '';
+  const rows = Math.min(id, 5);
+  const cols = Math.min(multiplier, 10);
+  for (let r = 0; r < Math.min(rows, 4); r++) {
+    for (let c = 0; c < Math.min(cols, 10); c++) {
+      visual += emo + ' ';
+    }
+    visual += '\n';
+  }
+  if (id > 5 || multiplier > 10) visual = emo.repeat(Math.min(result, 20));
+  document.getElementById('fact-visual').textContent = visual;
+}
+
+function prevFact() {
+  if (learnIndex > 0) { learnIndex--; renderFact(); }
+}
+
+function nextFact() {
+  if (learnIndex < 9) { learnIndex++; renderFact(); }
+  else { showToast('¡Ya aprendiste toda la tabla! ⭐'); }
+}
+</script>
+<script>
+// ============================================================
+// QUIZ
+// ============================================================
+let quizMode = 'practice';
+let quizQuestions = [];
+let quizCurrent = 0;
+let quizScore = 0;
+let quizAnswered = false;
+
+function generateQuestions(islandId, mode) {
+  const questions = [];
+  const count = mode === 'challenge' ? 10 : 7;
+  const pool = [];
+  for (let i = 1; i <= 10; i++) pool.push({ a: islandId, b: i, answer: islandId * i });
+  // Shuffle
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  return pool.slice(0, count);
+}
+
+function generateWrongAnswers(correct, islandId) {
+  const wrongs = new Set();
+  while (wrongs.size < 3) {
+    const type = Math.floor(Math.random() * 4);
+    let w;
+    if (type === 0) w = correct + (Math.floor(Math.random() * 5) + 1) * (Math.random() < 0.5 ? 1 : -1);
+    else if (type === 1) w = islandId * (Math.floor(Math.random() * 10) + 1);
+    else if (type === 2) w = correct + islandId * (Math.random() < 0.5 ? 1 : -1);
+    else w = correct + (Math.floor(Math.random() * 3) + 1) * (Math.random() < 0.5 ? 2 : -2);
+    if (w > 0 && w !== correct && !wrongs.has(w)) wrongs.add(w);
+  }
+  return Array.from(wrongs);
+}
+
+function startQuiz(mode) {
+  quizMode = mode;
+  quizQuestions = generateQuestions(currentIslandId, mode);
+  quizCurrent = 0;
+  quizScore = 0;
+  quizAnswered = false;
+  go('s-quiz');
+  renderQuizQuestion();
+}
+
+function renderQuizQuestion() {
+  const total = quizQuestions.length;
+  const q = quizQuestions[quizCurrent];
+  const pct = (quizCurrent / total) * 100;
+  document.getElementById('quiz-progress').style.width = pct + '%';
+  document.getElementById('quiz-counter').textContent = (quizCurrent + 1) + ' / ' + total;
+  document.getElementById('quiz-score-live').textContent = '⭐ ' + quizScore;
+  const isl = ISLANDS[currentIslandId - 1];
+  document.getElementById('quiz-island-emoji').textContent = isl.emoji;
+  document.getElementById('quiz-question').textContent = q.a + ' × ' + q.b + ' = ?';
+  document.getElementById('quiz-sub').textContent = quizMode === 'challenge' ? '⚔️ Modo Reto — ¡sin errores!' : '⚓ Modo Práctica';
+
+  const wrongs = generateWrongAnswers(q.answer, currentIslandId);
+  const options = [q.answer, ...wrongs].sort(() => Math.random() - 0.5);
+  const grid = document.getElementById('answer-grid');
+  grid.innerHTML = '';
+  quizAnswered = false;
+  options.forEach(opt => {
+    const btn = document.createElement('button');
+    btn.className = 'answer-btn';
+    btn.textContent = opt;
+    btn.onclick = () => answerQuestion(opt, q.answer, btn);
+    grid.appendChild(btn);
+  });
+}
+</script>
+<script>
+// ============================================================
+// QUIZ ANSWER + FLOW
+// ============================================================
+function answerQuestion(chosen, correct, btn) {
+  if (quizAnswered) return;
+  quizAnswered = true;
+  const allBtns = document.querySelectorAll('.answer-btn');
+  allBtns.forEach(b => { b.disabled = true; });
+
+  if (chosen === correct) {
+    btn.classList.add('correct');
+    const points = quizMode === 'challenge' ? 3 : 1;
+    quizScore += points;
+    state.streak++;
+    if (state.streak > state.maxStreak) state.maxStreak = state.streak;
+    showToast('¡Correcto! +' + points + ' ⭐');
+  } else {
+    btn.classList.add('wrong');
+    allBtns.forEach(b => { if (parseInt(b.textContent) === correct) b.classList.add('correct'); });
+    if (quizMode === 'challenge') quizScore = Math.max(0, quizScore - 1);
+    state.streak = 0;
+    showToast('¡Casi! La respuesta era ' + correct + ' 💪');
+  }
+  saveState();
+
+  setTimeout(() => {
+    quizCurrent++;
+    if (quizCurrent < quizQuestions.length) {
+      renderQuizQuestion();
+    } else {
+      showVictory();
+    }
+  }, 900);
+}
+</script>
+<script>
+// ============================================================
+// VICTORY
+// ============================================================
+function showVictory() {
+  const total = quizQuestions.length;
+  const maxPossible = quizMode === 'challenge' ? total * 3 : total;
+  const pct = quizScore / maxPossible;
+  let stars = 1;
+  if (pct >= 0.6) stars = 2;
+  if (pct >= 0.9) stars = 3;
+
+  const ist = getIslandState(currentIslandId);
+  const oldStars = ist.stars;
+  if (stars > ist.stars) ist.stars = stars;
+  if (quizScore > ist.bestScore) ist.bestScore = quizScore;
+  state.totalStars += quizScore;
+  if (ist.stars >= 3 && oldStars < 3) state.islandsCompleted++;
+
+  const starsEmoji = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
+  document.getElementById('victory-stars').textContent = starsEmoji;
+
+  const titles = ['¡Buen intento!', '¡Muy bien!', '¡Increíble!'];
+  document.getElementById('victory-title').textContent = titles[stars - 1];
+  document.getElementById('victory-subtitle').textContent =
+    'Has conseguido ' + stars + ' estrella' + (stars !== 1 ? 's' : '') + ' en ' + ISLANDS[currentIslandId-1].name;
+  document.getElementById('victory-score').textContent = quizScore;
+
+  // Check prizes
+  const newPrize = checkNewPrizes();
+  const prizeCard = document.getElementById('prize-card');
+  if (newPrize) {
+    prizeCard.style.display = 'block';
+    document.getElementById('prize-emoji').textContent = newPrize.emoji;
+    document.getElementById('prize-name').textContent = newPrize.name;
+  } else {
+    prizeCard.style.display = 'none';
+  }
+
+  saveState();
+  go('s-victory');
+  if (stars === 3) launchConfetti();
+}
+
+function checkNewPrizes() {
+  for (const p of PRIZES) {
+    if (!state.prizes.includes(p.id) && p.cond(state)) {
+      state.prizes.push(p.id);
+      return p;
+    }
+  }
+  return null;
+}
+</script>
+<script>
+// ============================================================
+// PRIZES SCREEN
+// ============================================================
+function renderPrizes() {
+  document.getElementById('ps-stars').textContent = state.totalStars;
+  document.getElementById('ps-islands').textContent = state.islandsCompleted;
+  document.getElementById('ps-streak').textContent = state.maxStreak;
+  document.getElementById('ps-badges').textContent = state.prizes.length;
+
+  const grid = document.getElementById('badges-grid');
+  grid.innerHTML = '';
+  PRIZES.forEach(p => {
+    const earned = state.prizes.includes(p.id);
+    const card = document.createElement('div');
+    card.className = 'badge-card' + (earned ? ' earned' : ' locked-badge');
+    card.innerHTML =
+      '<div class="badge-emoji">' + p.emoji + '</div>' +
+      '<div class="badge-name">' + p.name + '</div>';
+    grid.appendChild(card);
+  });
+}
+
+// ============================================================
+// TOAST
+// ============================================================
+let toastTimer = null;
+function showToast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), 2200);
+}
+
+// ============================================================
+// CONFETTI
+// ============================================================
+function launchConfetti() {
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const pieces = [];
+  const colors = ['#ffd700','#ff6b35','#5bb8f5','#2ecc71','#e74c3c','#fff','#c8eeff'];
+  for (let i = 0; i < 120; i++) {
+    pieces.push({
+      x: Math.random() * canvas.width,
+      y: -10 - Math.random() * 200,
+      w: 6 + Math.random() * 10,
+      h: 10 + Math.random() * 16,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      rot: Math.random() * Math.PI * 2,
+      vx: (Math.random() - 0.5) * 3,
+      vy: 2 + Math.random() * 4,
+      vr: (Math.random() - 0.5) * 0.15,
+    });
+  }
+  let frames = 0;
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pieces.forEach(p => {
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+      ctx.restore();
+      p.x += p.vx;
+      p.y += p.vy;
+      p.rot += p.vr;
+      p.vy += 0.08;
+    });
+    frames++;
+    if (frames < 180) requestAnimationFrame(draw);
+    else ctx.clearRect(0, 0, canvas.width, canvas.height);
+  }
+  draw();
+}
+</script>
+<script>
+// ============================================================
+// INIT
+// ============================================================
+(function init() {
+  loadState();
+
+  // Show/hide continue button
+  const continueBtn = document.getElementById('btn-continue');
+  if (state.playerName) {
+    continueBtn.style.display = 'inline-flex';
+  } else {
+    continueBtn.style.display = 'none';
+  }
+
+  // Allow pressing Enter on name input
+  document.getElementById('player-name-input').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') saveName();
+  });
+
+  // Resize confetti canvas on window resize
+  window.addEventListener('resize', function() {
+    const canvas = document.getElementById('confetti-canvas');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  });
+})();
+</script>
+</body>
+</html>
