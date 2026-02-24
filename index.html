@@ -16,11 +16,7 @@
   --ocean-foam: #c8eeff;
   --gold: #ffd700;
   --gold-dark: #c8a000;
-  --gold-light: #fff3a0;
-  --sand: #f5e6c8;
-  --sand-dark: #d4b896;
   --treasure: #ff6b35;
-  --treasure-dark: #cc4400;
   --green-island: #2ecc71;
   --green-dark: #1a8a4a;
   --danger: #e74c3c;
@@ -31,1016 +27,184 @@
 }
 
 * { margin:0; padding:0; box-sizing:border-box; }
-html, body {
-  width:100%; height:100%;
-  font-family: "Nunito", sans-serif;
-  overflow:hidden;
-  background: var(--ocean-deep);
-}
-
-#app {
-  width:100%; height:100%;
-  position:relative;
-  overflow:hidden;
-}
-
-.screen {
-  position:absolute; inset:0;
-  display:none;
-  flex-direction:column;
-  align-items:center;
-  overflow-y:auto;
-  overflow-x:hidden;
-  padding-bottom:40px;
-}
-
+html, body { width:100%; height:100%; font-family: "Nunito", sans-serif; overflow:hidden; background: var(--ocean-deep); }
+#app { width:100%; height:100%; position:relative; overflow:hidden; }
+.screen { position:absolute; inset:0; display:none; flex-direction:column; align-items:center; overflow-y:auto; overflow-x:hidden; padding-bottom:40px; }
 .screen.active { display:flex; }
 
-/* ---- ANIMATIONS ---- */
 @keyframes float { 0%, 100% { transform:translateY(0); } 50% { transform:translateY(-10px); } }
 @keyframes slideIn { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
 @keyframes pulse { 0%, 100% { transform:scale(1); } 50% { transform:scale(1.05); } }
 @keyframes shake { 0%, 100% { transform:translateX(0); } 25% { transform:translateX(-5px); } 75% { transform:translateX(5px); } }
 @keyframes bounce { 0%, 100% { transform:translateY(0); } 50% { transform:translateY(-10px); } }
 
-/* ---- SPLASH ---- */
-#s-splash {
-  background: linear-gradient(160deg, var(--ocean-deep) 0%, var(--ocean-mid) 50%, var(--ocean-light) 100%);
-  justify-content:center;
-  padding:40px 20px;
-}
+#s-intro { background: linear-gradient(160deg, var(--ocean-deep) 0%, var(--ocean-mid) 50%, var(--ocean-light) 100%); justify-content:center; align-items:center; padding:40px 20px; }
+.intro-container { text-align:center; animation: slideIn 0.8s ease; }
+.intro-boat { font-size:80px; margin-bottom:20px; animation: float 3s ease-in-out infinite; }
+.intro-title { font-family:"Fredoka One", cursive; font-size:clamp(2.5rem, 8vw, 4rem); color: var(--gold); text-shadow: 4px 4px 0 var(--gold-dark), 0 0 40px rgba(255,215,0,0.6); margin:16px 0; font-weight:900; letter-spacing:2px; }
+.intro-subtitle { color: var(--ocean-foam); font-size:clamp(1rem, 3vw, 1.5rem); font-weight:700; text-align:center; margin-bottom:20px; }
 
-.splash-ship {
-  font-size:100px;
-  animation: float 3s ease-in-out infinite;
-  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.4));
-}
+#s-name { background: linear-gradient(160deg, var(--ocean-mid) 0%, var(--ocean-deep) 100%); justify-content:center; padding:40px 20px; }
+.name-card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 2px solid rgba(255,255,255,0.2); border-radius: var(--radius); padding:40px 32px; max-width:440px; width:100%; text-align:center; }
+.name-card h2 { font-family:"Fredoka One", cursive; color: var(--gold); font-size:1.8rem; margin:16px 0 8px; }
+.name-card p { color: var(--ocean-foam); margin-bottom:24px; }
+.input-field { width:100%; padding:14px 18px; border:3px solid var(--ocean-surf); border-radius:50px; font-family:"Nunito", sans-serif; font-size:1.2rem; font-weight:700; text-align:center; background: rgba(255,255,255,0.9); color: var(--ocean-deep); outline:none; margin-bottom:20px; }
+.input-field:focus { border-color: var(--gold); box-shadow: 0 0 0 4px rgba(255,215,0,0.3); }
 
-.splash-title {
-  font-family: "Fredoka One", cursive;
-  font-size:clamp(2rem, 8vw, 4rem);
-  color: var(--gold);
-  text-shadow: 3px 3px 0 var(--gold-dark), 0 0 30px rgba(255,215,0,0.5);
-  margin:16px 0 8px;
-  text-align:center;
-}
+#s-menu { background: linear-gradient(160deg, var(--ocean-deep) 0%, var(--ocean-mid) 100%); justify-content:center; padding:20px; gap:20px; }
+.menu-header { text-align:center; margin-bottom:20px; }
+.menu-header h1 { font-family:"Fredoka One", cursive; color: var(--gold); font-size:2.5rem; text-shadow: 2px 2px 0 var(--gold-dark); margin-bottom:8px; }
+.menu-header .player-name { color: var(--ocean-foam); font-size:1.3rem; font-weight:700; margin-bottom:16px; }
+.modes-grid { display:grid; grid-template-columns: 1fr; gap:16px; width:100%; max-width:500px; padding:0 20px; }
+@media(min-width:600px) { .modes-grid { grid-template-columns: repeat(2, 1fr); } }
+.mode-card { background: rgba(255,255,255,0.08); border: 2px solid rgba(255,255,255,0.15); border-radius: var(--radius); padding:24px; text-align:center; cursor:pointer; transition: transform 0.2s, box-shadow 0.2s, background 0.2s; animation: slideIn 0.5s ease; }
+.mode-card:hover { transform: translateY(-4px); background: rgba(255,255,255,0.12); box-shadow: 0 8px 20px var(--shadow); }
+.mode-emoji { font-size:3.5rem; margin-bottom:8px; display:block; }
+.mode-name { font-family:"Fredoka One", cursive; color: var(--gold); font-size:1.3rem; margin-bottom:8px; }
+.mode-desc { color: var(--ocean-foam); font-size:0.9rem; line-height:1.4; }
 
-.splash-subtitle {
-  color: var(--ocean-foam);
-  font-size:clamp(1rem, 3vw, 1.3rem);
-  font-weight:700;
-  text-align:center;
-  margin-bottom:40px;
-}
-
-.splash-waves {
-  position:absolute; bottom:0; left:0; right:0;
-  height:120px;
-  background: linear-gradient(transparent, var(--ocean-deep));
-  pointer-events:none;
-}
-
-/* ---- BUTTONS ---- */
-.btn {
-  display:inline-flex; align-items:center; justify-content:center; gap:8px;
-  padding:14px 28px;
-  border:none; border-radius:50px;
-  font-family:"Nunito", sans-serif;
-  font-size:1.1rem; font-weight:800;
-  cursor:pointer;
-  transition: transform 0.1s, box-shadow 0.1s;
-  position:relative;
-  text-decoration:none;
-  user-select:none;
-}
-
+.btn { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:14px 28px; border:none; border-radius:50px; font-family:"Nunito", sans-serif; font-size:1.1rem; font-weight:800; cursor:pointer; transition: transform 0.1s, box-shadow 0.1s; user-select:none; }
 .btn:active { transform:translateY(3px); }
-
-.btn-gold {
-  background: linear-gradient(135deg, var(--gold) 0%, #ffb300 100%);
-  color: var(--ocean-deep);
-  box-shadow: 0 6px 0 var(--gold-dark), 0 8px 16px var(--shadow);
-}
-
-.btn-gold:active { box-shadow: 0 3px 0 var(--gold-dark), 0 4px 8px var(--shadow); }
-
-.btn-ocean {
-  background: linear-gradient(135deg, var(--ocean-light) 0%, var(--ocean-mid) 100%);
-  color: var(--white);
-  box-shadow: 0 6px 0 #0d3060, 0 8px 16px var(--shadow);
-}
-
-.btn-ocean:active { box-shadow: 0 3px 0 #0d3060, 0 4px 8px var(--shadow); }
-
-.btn-green {
-  background: linear-gradient(135deg, var(--green-island) 0%, #27ae60 100%);
-  color: var(--white);
-  box-shadow: 0 6px 0 var(--green-dark), 0 8px 16px var(--shadow);
-}
-
-.btn-green:active { box-shadow: 0 3px 0 var(--green-dark), 0 4px 8px var(--shadow); }
-
+.btn-gold { background: linear-gradient(135deg, var(--gold) 0%, #ffb300 100%); color: var(--ocean-deep); box-shadow: 0 6px 0 var(--gold-dark), 0 8px 16px var(--shadow); }
+.btn-ocean { background: linear-gradient(135deg, var(--ocean-light) 0%, var(--ocean-mid) 100%); color: var(--white); box-shadow: 0 6px 0 #0d3060, 0 8px 16px var(--shadow); }
+.btn-green { background: linear-gradient(135deg, var(--green-island) 0%, #27ae60 100%); color: var(--white); box-shadow: 0 6px 0 var(--green-dark), 0 8px 16px var(--shadow); }
 .btn-lg { padding:18px 40px; font-size:1.3rem; }
 .btn-sm { padding:10px 20px; font-size:0.95rem; }
 .btn-block { width:100%; }
 
-/* ---- NAME SCREEN ---- */
-#s-name {
-  background: linear-gradient(160deg, var(--ocean-mid) 0%, var(--ocean-deep) 100%);
-  justify-content:center;
-  padding:40px 20px;
-}
-
-.name-card {
-  background: rgba(255,255,255,0.1);
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(255,255,255,0.2);
-  border-radius: var(--radius);
-  padding:40px 32px;
-  max-width:440px; width:100%;
-  text-align:center;
-}
-
-.name-card h2 {
-  font-family:"Fredoka One", cursive;
-  color: var(--gold);
-  font-size:1.8rem;
-  margin:16px 0 8px;
-}
-
+#s-name { background: linear-gradient(160deg, var(--ocean-mid) 0%, var(--ocean-deep) 100%); justify-content:center; padding:40px 20px; }
+.name-card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 2px solid rgba(255,255,255,0.2); border-radius: var(--radius); padding:40px 32px; max-width:440px; width:100%; text-align:center; }
+.name-card h2 { font-family:"Fredoka One", cursive; color: var(--gold); font-size:1.8rem; margin:16px 0 8px; }
 .name-card p { color: var(--ocean-foam); margin-bottom:24px; }
+.input-field { width:100%; padding:14px 18px; border:3px solid var(--ocean-surf); border-radius:50px; font-family:"Nunito", sans-serif; font-size:1.2rem; font-weight:700; text-align:center; background: rgba(255,255,255,0.9); color: var(--ocean-deep); outline:none; margin-bottom:20px; }
+.input-field:focus { border-color: var(--gold); box-shadow: 0 0 0 4px rgba(255,215,0,0.3); }
 
-.input-field {
-  width:100%; padding:14px 18px;
-  border:3px solid var(--ocean-surf);
-  border-radius:50px;
-  font-family:"Nunito", sans-serif;
-  font-size:1.2rem; font-weight:700;
-  text-align:center;
-  background: rgba(255,255,255,0.9);
-  color: var(--ocean-deep);
-  outline:none;
-  margin-bottom:20px;
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.input-field:focus {
-  border-color: var(--gold);
-  box-shadow: 0 0 0 4px rgba(255,215,0,0.3);
-}
-
-/* ---- MENU SCREEN ---- */
-#s-menu {
-  background: linear-gradient(160deg, var(--ocean-deep) 0%, var(--ocean-mid) 100%);
-  justify-content:center;
-  padding:20px;
-  gap:20px;
-}
-
-.menu-header {
-  text-align:center;
-  margin-bottom:20px;
-}
-
-.menu-header h1 {
-  font-family:"Fredoka One", cursive;
-  color: var(--gold);
-  font-size:2.5rem;
-  text-shadow: 2px 2px 0 var(--gold-dark);
-  margin-bottom:8px;
-}
-
-.menu-header .player-name {
-  color: var(--ocean-foam);
-  font-size:1.3rem;
-  font-weight:700;
-}
-
-.modes-grid {
-  display:grid;
-  grid-template-columns: 1fr;
-  gap:16px;
-  width:100%;
-  max-width:500px;
-  padding:0 20px;
-}
-
-@media(min-width:600px) {
-  .modes-grid { grid-template-columns: repeat(2, 1fr); }
-}
-
-.mode-card {
-  background: rgba(255,255,255,0.08);
-  border: 2px solid rgba(255,255,255,0.15);
-  border-radius: var(--radius);
-  padding:24px;
-  text-align:center;
-  cursor:pointer;
-  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
-  animation: slideIn 0.5s ease;
-}
-
-.mode-card:hover {
-  transform: translateY(-4px);
-  background: rgba(255,255,255,0.12);
-  box-shadow: 0 8px 20px var(--shadow);
-}
-
-.mode-emoji {
-  font-size:3.5rem;
-  margin-bottom:8px;
-  display:block;
-}
-
-.mode-name {
-  font-family:"Fredoka One", cursive;
-  color: var(--gold);
-  font-size:1.3rem;
-  margin-bottom:8px;
-}
-
-.mode-desc {
-  color: var(--ocean-foam);
-  font-size:0.9rem;
-  line-height:1.4;
-}
-
-/* ---- ACHIEVEMENTS SCREEN ---- */
-#s-achievements {
-  background: linear-gradient(160deg, var(--ocean-deep) 0%, var(--ocean-mid) 100%);
-  padding-bottom:40px;
-}
-
-.achievements-header {
-  background: rgba(0,0,0,0.3);
-  backdrop-filter: blur(10px);
-  padding:16px 20px;
-  width:100%;
-  display:flex;
-  align-items:center;
-  gap:16px;
-  position:sticky;
-  top:0;
-  z-index:10;
-  border-bottom: 2px solid rgba(255,255,255,0.1);
-  margin-bottom:20px;
-  flex-wrap:wrap;
-}
-
-.achievements-title {
-  font-family:"Fredoka One", cursive;
-  color: var(--gold);
-  font-size:1.8rem;
-  text-shadow: 2px 2px 0 var(--gold-dark);
-  flex:1;
-  text-align:center;
-  margin:0;
-}
-
-.achievements-container {
-  width:100%;
-  max-width:900px;
-  margin:0 auto;
-  padding:0 20px;
-}
-
-.achievements-stats {
-  display:grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap:12px;
-  margin-bottom:32px;
-}
-
-.achievement-stat {
-  background: rgba(255,255,255,0.08);
-  border: 2px solid rgba(255,215,0,0.3);
-  border-radius: var(--radius);
-  padding:20px;
-  text-align:center;
-}
-
-.stat-label {
-  color: var(--ocean-foam);
-  font-size:0.9rem;
-  margin-bottom:8px;
-}
-
-.stat-number {
-  font-family:"Fredoka One", cursive;
-  color: var(--gold);
-  font-size:2.5rem;
-  text-shadow: 2px 2px 0 var(--gold-dark);
-}
-
-.achievements-subtitle {
-  font-family:"Fredoka One", cursive;
-  color: var(--gold);
-  font-size:1.5rem;
-  text-shadow: 2px 2px 0 var(--gold-dark);
-  margin-bottom:16px;
-  text-align:center;
-}
-
-.achievements-grid {
-  display:grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-  gap:16px;
-}
-
-.achievement-item {
-  background: rgba(255,255,255,0.08);
-  border: 2px solid rgba(255,255,255,0.15);
-  border-radius: var(--radius);
-  padding:16px;
-  text-align:center;
-  animation: slideIn 0.5s ease;
-  transition: all 0.2s;
-}
-
-.achievement-item.locked {
-  opacity:0.4;
-  border-color: rgba(255,255,255,0.08);
-}
-
-.achievement-item:hover:not(.locked) {
-  transform: translateY(-4px);
-  background: rgba(255,255,255,0.12);
-  box-shadow: 0 8px 20px var(--shadow);
-}
-
-.achievement-icon {
-  font-size:2.5rem;
-  margin-bottom:8px;
-}
-
-.achievement-item-name {
-  font-family:"Fredoka One", cursive;
-  color: var(--gold);
-  font-size:1rem;
-  margin-bottom:8px;
-  font-weight:700;
-}
-
-.achievement-item-desc {
-  color: var(--ocean-foam);
-  font-size:0.75rem;
-  line-height:1.3;
-}
-
-.achievement-item.locked .achievement-item-name {
-  color: var(--white);
-}
-
-.achievement-item.locked .achievement-item-desc {
-  color: rgba(255,255,255,0.5);
-}
-
-/* ---- TIPS SCREEN ---- */
-#s-tips {
-  background: linear-gradient(160deg, var(--ocean-deep) 0%, var(--ocean-mid) 100%);
-  padding:20px;
-}
-
-.tips-header {
-  width:100%;
-  padding:16px 20px;
-  display:flex;
-  align-items:center;
-  margin-bottom:20px;
-}
-
-.tips-container {
-  background: rgba(255,255,255,0.08);
-  border: 2px solid rgba(255,255,255,0.15);
-  border-radius: var(--radius);
-  padding:32px 24px;
-  width:100%;
-  max-width:600px;
-  margin:0 auto;
-  text-align:center;
-  animation: slideIn 0.5s ease;
-}
-
-.tips-emoji {
-  font-size:4rem;
-  margin-bottom:16px;
-}
-
-.tips-title {
-  font-family:"Fredoka One", cursive;
-  color: var(--gold);
-  font-size:2rem;
-  text-shadow: 2px 2px 0 var(--gold-dark);
-  margin-bottom:20px;
-}
-
-.tips-content {
-  background: rgba(0,0,0,0.3);
-  border-radius: var(--radius-sm);
-  padding:20px;
-  margin-bottom:24px;
-  text-align:left;
-  color: var(--ocean-foam);
-  line-height:1.8;
-}
-
-.tips-content h3 {
-  color: var(--gold);
-  margin-top:16px;
-  margin-bottom:8px;
-  font-size:1.1rem;
-}
-
-.tips-content p {
-  margin-bottom:12px;
-  font-size:0.95rem;
-}
-
-.tips-content ul {
-  margin-left:20px;
-  margin-bottom:12px;
-}
-
-.tips-content li {
-  margin-bottom:8px;
-}
-
-/* ---- MAP SCREEN (ISLAND MODE) ---- */
-#s-map {
-  background: linear-gradient(160deg, var(--ocean-deep) 0%, var(--ocean-mid) 100%);
-  padding-bottom:40px;
-}
-
-.map-header {
-  background: rgba(0,0,0,0.3);
-  backdrop-filter: blur(10px);
-  padding:16px 20px;
-  width:100%;
-  display:flex; align-items:center; gap:12px;
-  position:sticky; top:0; z-index:10;
-  border-bottom: 2px solid rgba(255,255,255,0.1);
-  margin-bottom:20px;
-}
-
-.map-back-btn {
-  padding:10px 16px;
-  font-size:0.95rem;
-}
-
-.player-stats {
-  flex:1;
-  display:flex;
-  gap:12px;
-  justify-content:flex-end;
-}
-
-.stat-chip {
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.25);
-  border-radius:20px;
-  padding:6px 12px;
-  color: var(--white);
-  font-weight:700;
-  font-size:0.9rem;
-  display:flex; align-items:center; gap:4px;
-}
-
-.map-title {
-  font-family:"Fredoka One", cursive;
-  color: var(--gold);
-  font-size:2rem;
-  text-align:center;
-  padding:20px 20px 8px;
-  text-shadow: 2px 2px 0 var(--gold-dark);
-}
-
-.islands-grid {
-  display:grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap:16px;
-  padding:16px 20px;
-  width:100%;
-  max-width:900px;
-  margin:0 auto;
-}
-
+#s-map { background: linear-gradient(160deg, var(--ocean-deep) 0%, var(--ocean-mid) 100%); padding-bottom:40px; }
+.map-header { background: rgba(0,0,0,0.3); backdrop-filter: blur(10px); padding:16px 20px; width:100%; display:flex; align-items:center; gap:12px; position:sticky; top:0; z-index:10; border-bottom: 2px solid rgba(255,255,255,0.1); margin-bottom:20px; }
+.map-back-btn { padding:10px 16px; font-size:0.95rem; }
+.player-stats { flex:1; display:flex; gap:12px; justify-content:flex-end; }
+.stat-chip { background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.25); border-radius:20px; padding:6px 12px; color: var(--white); font-weight:700; font-size:0.9rem; display:flex; align-items:center; gap:4px; }
+.map-title { font-family:"Fredoka One", cursive; color: var(--gold); font-size:2rem; text-align:center; padding:20px 20px 8px; text-shadow: 2px 2px 0 var(--gold-dark); }
+.islands-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:16px; padding:16px 20px; width:100%; max-width:900px; margin:0 auto; }
 @media(min-width:600px) { .islands-grid { grid-template-columns: repeat(3, 1fr); } }
 @media(min-width:900px) { .islands-grid { grid-template-columns: repeat(5, 1fr); } }
 
-.island-card {
-  background: rgba(255,255,255,0.08);
-  border: 2px solid rgba(255,255,255,0.15);
-  border-radius: var(--radius);
-  padding:16px;
-  text-align:center;
-  cursor:pointer;
-  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
-  position:relative;
-  overflow:hidden;
-  animation: slideIn 0.5s ease;
-}
+.island-card { background: rgba(255,255,255,0.08); border: 2px solid rgba(255,255,255,0.15); border-radius: var(--radius); padding:16px; text-align:center; cursor:pointer; transition: transform 0.2s, box-shadow 0.2s, background 0.2s; position:relative; overflow:hidden; animation: slideIn 0.5s ease; }
+.island-card:hover { transform: translateY(-4px); background: rgba(255,255,255,0.12); box-shadow: 0 8px 20px var(--shadow); border-color: var(--gold); }
+.island-card.locked { opacity:0.5; cursor:not-allowed; }
+.island-card.locked:hover { transform:none; background: rgba(255,255,255,0.08); box-shadow: none; border-color: rgba(255,255,255,0.15); }
+.island-emoji { font-size:3rem; margin-bottom:8px; animation: bounce 2s infinite; }
+.island-lock { position:absolute; top:8px; right:8px; font-size:1.2rem; display:none; }
+.island-card.locked .island-lock { display:block; }
+.island-multiplier { font-family:"Fredoka One", cursive; color: var(--gold); font-size:1.5rem; margin-bottom:4px; font-weight:700; }
+.island-name { font-family:"Fredoka One", cursive; color: var(--white); font-size:1.1rem; margin-bottom:8px; }
+.island-stars { font-size:1.2rem; margin:8px 0; letter-spacing:4px; min-height:20px; }
+.island-score { color: var(--ocean-foam); font-size:0.75rem; font-weight:700; }
 
-.island-card:hover {
-  transform: translateY(-4px);
-  background: rgba(255,255,255,0.12);
-  box-shadow: 0 8px 20px var(--shadow);
-}
+#s-tips { background: linear-gradient(160deg, var(--ocean-deep) 0%, var(--ocean-mid) 100%); padding:20px; }
+.tips-header { width:100%; padding:16px 20px; display:flex; align-items:center; margin-bottom:20px; }
+.tips-container { background: rgba(255,255,255,0.08); border: 2px solid rgba(255,255,255,0.15); border-radius: var(--radius); padding:32px 24px; width:100%; max-width:600px; margin:0 auto; text-align:center; animation: slideIn 0.5s ease; }
+.tips-emoji { font-size:4rem; margin-bottom:16px; }
+.tips-title { font-family:"Fredoka One", cursive; color: var(--gold); font-size:2rem; text-shadow: 2px 2px 0 var(--gold-dark); margin-bottom:20px; }
+.tips-content { background: rgba(0,0,0,0.3); border-radius: var(--radius-sm); padding:20px; margin-bottom:24px; text-align:left; color: var(--ocean-foam); line-height:1.8; }
+.tips-content h3 { color: var(--gold); margin-top:16px; margin-bottom:8px; font-size:1.1rem; }
+.tips-content p { margin-bottom:12px; font-size:0.95rem; }
 
-.island-card.locked {
-  opacity:0.5;
-  cursor:not-allowed;
-}
+#s-achievements { background: linear-gradient(160deg, var(--ocean-deep) 0%, var(--ocean-mid) 100%); padding-bottom:40px; }
+.achievements-header { background: rgba(0,0,0,0.3); backdrop-filter: blur(10px); padding:16px 20px; width:100%; display:flex; align-items:center; gap:16px; position:sticky; top:0; z-index:10; border-bottom: 2px solid rgba(255,255,255,0.1); margin-bottom:20px; flex-wrap:wrap; }
+.achievements-title { font-family:"Fredoka One", cursive; color: var(--gold); font-size:1.8rem; text-shadow: 2px 2px 0 var(--gold-dark); flex:1; text-align:center; margin:0; }
+.achievements-container { width:100%; max-width:900px; margin:0 auto; padding:0 20px; }
+.achievements-stats { display:grid; grid-template-columns: repeat(3, 1fr); gap:12px; margin-bottom:32px; }
+.achievement-stat { background: rgba(255,255,255,0.08); border: 2px solid rgba(255,215,0,0.3); border-radius: var(--radius); padding:20px; text-align:center; }
+.stat-label { color: var(--ocean-foam); font-size:0.9rem; margin-bottom:8px; }
+.stat-number { font-family:"Fredoka One", cursive; color: var(--gold); font-size:2.5rem; text-shadow: 2px 2px 0 var(--gold-dark); }
+.achievements-subtitle { font-family:"Fredoka One", cursive; color: var(--gold); font-size:1.5rem; text-shadow: 2px 2px 0 var(--gold-dark); margin-bottom:16px; text-align:center; }
+.achievements-grid { display:grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap:16px; }
+.achievement-item { background: rgba(255,255,255,0.08); border: 2px solid rgba(255,255,255,0.15); border-radius: var(--radius); padding:16px; text-align:center; animation: slideIn 0.5s ease; transition: all 0.2s; }
+.achievement-item.locked { opacity:0.4; border-color: rgba(255,255,255,0.08); }
+.achievement-item:hover:not(.locked) { transform: translateY(-4px); background: rgba(255,255,255,0.12); box-shadow: 0 8px 20px var(--shadow); }
+.achievement-icon { font-size:2.5rem; margin-bottom:8px; }
+.achievement-item-name { font-family:"Fredoka One", cursive; color: var(--gold); font-size:1rem; margin-bottom:8px; font-weight:700; }
+.achievement-item-desc { color: var(--ocean-foam); font-size:0.75rem; line-height:1.3; }
+.achievement-item.locked .achievement-item-name { color: var(--white); }
+.achievement-item.locked .achievement-item-desc { color: rgba(255,255,255,0.5); }
 
-.island-card.locked:hover {
-  transform:none;
-  background: rgba(255,255,255,0.08);
-  box-shadow: none;
-}
+#s-quiz { background: linear-gradient(160deg, var(--ocean-deep) 0%, var(--ocean-mid) 100%); justify-content:center; padding:20px; }
+.quiz-header { background: rgba(0,0,0,0.3); backdrop-filter: blur(10px); padding:16px 20px; width:100%; display:flex; align-items:center; gap:12px; position:sticky; top:0; z-index:10; border-bottom: 2px solid rgba(255,255,255,0.1); margin-bottom:20px; border-radius: var(--radius); }
+.quiz-counter { background: rgba(255,255,255,0.15); border-radius:50%; width:50px; height:50px; display:flex; align-items:center; justify-content:center; color: var(--gold); font-weight:800; font-size:1.1rem; }
+.quiz-timer { background: rgba(255,215,0,0.2); border: 2px solid var(--gold); border-radius:50%; width:50px; height:50px; display:flex; align-items:center; justify-content:center; color: var(--gold); font-weight:800; font-size:1.2rem; margin-left:auto; }
+.quiz-timer.warning { background: rgba(230,120,100,0.2); border-color: var(--danger); color: var(--danger); }
+.quiz-container { background: rgba(255,255,255,0.08); border: 2px solid rgba(255,255,255,0.15); border-radius: var(--radius); padding:20px 16px; width:100%; max-width:600px; text-align:center; }
+.quiz-question { font-family:"Fredoka One", cursive; font-size:clamp(2rem, 6vw, 3.5rem); color: var(--gold); margin:20px 0; text-shadow: 2px 2px 0 var(--gold-dark); }
+.quiz-sub { color: var(--ocean-foam); font-size:1rem; margin-bottom:24px; font-weight:700; }
+.quiz-score { color: var(--gold); font-weight:800; font-size:1.2rem; margin:8px 0 24px; }
 
-.island-emoji {
-  font-size:3rem;
-  margin-bottom:8px;
-  animation: bounce 2s infinite;
-}
+.answer-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:12px; margin-top:20px; }
+.answer-btn { padding:16px 12px; font-size:1.3rem; font-weight:800; border:3px solid rgba(255,255,255,0.2); border-radius: var(--radius-sm); background: rgba(255,255,255,0.05); color: var(--white); cursor:pointer; transition: all 0.2s; font-family:"Nunito", sans-serif; }
+.answer-btn:hover { background: rgba(255,255,255,0.12); border-color: var(--ocean-foam); }
+.answer-btn.correct { background: rgba(46,204,113,0.3); border-color: var(--green-island); color: var(--green-island); animation: pulse 0.6s ease; }
+.answer-btn.wrong { background: rgba(231,76,60,0.3); border-color: var(--danger); color: var(--danger); animation: shake 0.4s ease; }
+.answer-btn:disabled { cursor:not-allowed; opacity:0.7; }
 
-.island-name {
-  font-family:"Fredoka One", cursive;
-  color: var(--gold);
-  font-size:1.4rem;
-  margin-bottom:8px;
-}
+.advanced-mult-display { background: rgba(0,0,0,0.3); border-radius: var(--radius); padding:40px 20px; margin:20px 0; font-family: "Courier New", monospace; display:flex; flex-direction:column; gap:8px; align-items:flex-end; max-width:300px; margin-left:auto; margin-right:auto; }
+.mult-line { display:flex; align-items:center; justify-content:flex-end; gap:12px; font-size:2rem; color: var(--ocean-foam); font-weight:700; min-height:50px; }
+.mult-line.operator::before { content: '×'; color: var(--gold); font-weight:800; font-size:2.2rem; margin-right:8px; }
+.mult-line.equals { border-top:3px solid var(--ocean-foam); padding-top:8px; margin-top:8px; font-size:0; }
+.mult-line.equals::before { content: '='; font-size:2rem; color: var(--gold); margin-right:12px; }
+.mult-numbers { display:flex; gap:0; letter-spacing:2px; }
+.mult-digit { width:50px; height:50px; display:flex; align-items:center; justify-content:center; font-size:2rem; font-weight:700; }
 
-.island-desc {
-  color: var(--ocean-foam);
-  font-size:0.8rem;
-  margin-bottom:8px;
-}
+.input-boxes { display:flex; flex-wrap:nowrap; gap:6px; justify-content:center; align-items:center; margin:20px 0; width:100%; padding:0 10px; overflow:hidden; }
+.digit-box { width:50px; height:50px; min-width:50px; border:3px solid var(--ocean-surf); border-radius: var(--radius-sm); font-size:1.5rem; font-weight:800; text-align:center; background: rgba(255,255,255,0.1); color: var(--white); font-family:"Nunito", sans-serif; transition: all 0.2s; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:1; }
+.digit-box:hover { border-color: var(--ocean-foam); background: rgba(255,255,255,0.15); }
+.digit-box.active { border-color: var(--gold); box-shadow: 0 0 16px rgba(255,215,0,0.6); background: rgba(255,215,0,0.2); transform: scale(1.05); }
+.digit-box.filled { border-color: var(--green-island); background: rgba(46,204,113,0.2); color: var(--green-island); }
+.digit-box.error { border-color: var(--danger); background: rgba(231,76,60,0.2); color: var(--danger); animation: shake 0.4s ease; }
 
-.island-stars {
-  font-size:1.2rem;
-  margin:8px 0;
-  letter-spacing:4px;
-  min-height:20px;
-}
+.numpad { display:grid; grid-template-columns: repeat(5, 1fr); gap:8px; margin-top:20px; max-width:400px; margin-left:auto; margin-right:auto; }
+.numpad-btn { padding:14px; border:2px solid rgba(255,255,255,0.2); border-radius: var(--radius-sm); background: rgba(255,255,255,0.05); color: var(--white); font-weight:700; font-size:1.3rem; cursor:pointer; transition: all 0.2s; font-family:"Nunito", sans-serif; }
+.numpad-btn:hover { background: rgba(255,255,255,0.12); border-color: var(--ocean-foam); }
+.numpad-btn:active { transform: scale(0.95); }
+.numpad-btn.delete { grid-column: span 2; background: rgba(231,76,60,0.15); border-color: var(--danger); color: var(--danger); }
+.numpad-btn.delete:hover { background: rgba(231,76,60,0.25); }
 
-.island-score {
-  color: var(--gold);
-  font-size:0.85rem;
-  font-weight:700;
-}
+.chrono-big-timer { font-family:"Fredoka One", cursive; font-size:4rem; color: var(--gold); text-shadow: 2px 2px 0 var(--gold-dark); margin:20px 0; font-weight:800; }
+.chrono-big-timer.danger { color: var(--danger); animation: pulse 0.6s ease infinite; }
+.chrono-stats { display:grid; grid-template-columns: 1fr 1fr; gap:12px; width:100%; margin:20px 0; }
+.stat-box { background: rgba(255,255,255,0.08); border: 2px solid rgba(255,255,255,0.15); border-radius: var(--radius-sm); padding:12px; text-align:center; }
+.stat-value { font-family:"Fredoka One", cursive; color: var(--gold); font-size:1.8rem; font-weight:800; }
 
-/* ---- QUIZ SCREEN ---- */
-#s-quiz {
-  background: linear-gradient(160deg, var(--ocean-deep) 0%, var(--ocean-mid) 100%);
-  justify-content:center;
-  padding:20px;
-}
+#s-victory { background: linear-gradient(160deg, var(--ocean-light) 0%, var(--ocean-mid) 50%, var(--ocean-deep) 100%); justify-content:center; padding:20px; }
+.victory-container { text-align:center; padding:40px 32px; background: rgba(255,255,255,0.08); border: 2px solid rgba(255,215,0,0.3); border-radius: var(--radius); max-width:500px; animation: slideIn 0.6s ease; }
+.victory-stars { font-size:3rem; margin:16px 0; letter-spacing:8px; animation: pulse 0.8s ease; }
+.victory-title { font-family:"Fredoka One", cursive; color: var(--gold); font-size:2.2rem; text-shadow: 2px 2px 0 var(--gold-dark); margin:16px 0; }
+.victory-subtitle { color: var(--ocean-foam); font-size:1.1rem; margin-bottom:20px; }
+.victory-score { font-family:"Fredoka One", cursive; font-size:2rem; color: var(--gold); margin:16px 0; }
+.achievement-card { margin:20px 0; padding:16px; background:rgba(255,215,0,0.2); border:2px solid var(--gold); border-radius:var(--radius-sm); display:flex; align-items:center; gap:12px; }
+.achievement-emoji { font-size:2.5rem; }
+.achievement-info { text-align:left; }
+.achievement-name { color:var(--gold); font-weight:700; margin-bottom:4px; }
+.achievement-desc { color:var(--ocean-foam); font-size:0.85rem; }
 
-.quiz-header {
-  background: rgba(0,0,0,0.3);
-  backdrop-filter: blur(10px);
-  padding:16px 20px;
-  width:100%;
-  display:flex; align-items:center; gap:12px;
-  position:sticky; top:0; z-index:10;
-  border-bottom: 2px solid rgba(255,255,255,0.1);
-  margin-bottom:20px;
-  border-radius: var(--radius);
-}
-
-.quiz-counter {
-  background: rgba(255,255,255,0.15);
-  border-radius:50%;
-  width:50px; height:50px;
-  display:flex; align-items:center; justify-content:center;
-  color: var(--gold);
-  font-weight:800;
-  font-size:1.1rem;
-}
-
-.quiz-timer {
-  background: rgba(255,215,0,0.2);
-  border: 2px solid var(--gold);
-  border-radius:50%;
-  width:50px; height:50px;
-  display:flex; align-items:center; justify-content:center;
-  color: var(--gold);
-  font-weight:800;
-  font-size:1.2rem;
-  margin-left:auto;
-}
-
-.quiz-timer.warning { 
-  background: rgba(230,120,100,0.2); 
-  border-color: var(--danger); 
-  color: var(--danger); 
-}
-
-.quiz-container {
-  background: rgba(255,255,255,0.08);
-  border: 2px solid rgba(255,255,255,0.15);
-  border-radius: var(--radius);
-  padding:20px 16px;
-  width:100%;
-  max-width:600px;
-  text-align:center;
-}
-
-.quiz-question {
-  font-family:"Fredoka One", cursive;
-  font-size:clamp(2rem, 6vw, 3.5rem);
-  color: var(--gold);
-  margin:20px 0;
-  text-shadow: 2px 2px 0 var(--gold-dark);
-}
-
-.quiz-sub {
-  color: var(--ocean-foam);
-  font-size:1rem;
-  margin-bottom:24px;
-  font-weight:700;
-}
-
-.quiz-score {
-  color: var(--gold);
-  font-weight:800;
-  font-size:1.2rem;
-  margin:8px 0 24px;
-}
-
-/* ---- ANSWER GRID (Multiple Choice) ---- */
-.answer-grid {
-  display:grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap:12px;
-  margin-top:20px;
-}
-
-.answer-btn {
-  padding:16px 12px;
-  font-size:1.3rem;
-  font-weight:800;
-  border:3px solid rgba(255,255,255,0.2);
-  border-radius: var(--radius-sm);
-  background: rgba(255,255,255,0.05);
-  color: var(--white);
-  cursor:pointer;
-  transition: all 0.2s;
-  font-family:"Nunito", sans-serif;
-}
-
-.answer-btn:hover { 
-  background: rgba(255,255,255,0.12);
-  border-color: var(--ocean-foam);
-}
-
-.answer-btn.correct {
-  background: rgba(46,204,113,0.3);
-  border-color: var(--green-island);
-  color: var(--green-island);
-  animation: pulse 0.6s ease;
-}
-
-.answer-btn.wrong {
-  background: rgba(231,76,60,0.3);
-  border-color: var(--danger);
-  color: var(--danger);
-  animation: shake 0.4s ease;
-}
-
-.answer-btn:disabled {
-  cursor:not-allowed;
-  opacity:0.7;
-}
-
-/* ---- ADVANCED MODE - VERTICAL MULTIPLICATION ---- */
-.advanced-mult-display {
-  background: rgba(0,0,0,0.3);
-  border-radius: var(--radius);
-  padding:40px 20px;
-  margin:20px 0;
-  font-family: "Courier New", monospace;
-  display:flex;
-  flex-direction:column;
-  gap:8px;
-  align-items:flex-end;
-  max-width:300px;
-  margin-left:auto;
-  margin-right:auto;
-}
-
-.mult-line {
-  display:flex;
-  align-items:center;
-  justify-content:flex-end;
-  gap:12px;
-  font-size:2rem;
-  color: var(--ocean-foam);
-  font-weight:700;
-  min-height:50px;
-}
-
-.mult-line.operator::before {
-  content: '×';
-  color: var(--gold);
-  font-weight:800;
-  font-size:2.2rem;
-  margin-right:8px;
-}
-
-.mult-line.equals {
-  border-top:3px solid var(--ocean-foam);
-  padding-top:8px;
-  margin-top:8px;
-  font-size:0;
-}
-
-.mult-line.equals::before {
-  content: '=';
-  font-size:2rem;
-  color: var(--gold);
-  margin-right:12px;
-}
-
-.mult-numbers {
-  display:flex;
-  gap:0;
-  letter-spacing:2px;
-}
-
-.mult-digit {
-  width:50px;
-  height:50px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:2rem;
-  font-weight:700;
-}
-
-.input-boxes {
-  display:flex;
-  flex-wrap:nowrap;
-  gap:6px;
-  justify-content:center;
-  align-items:center;
-  margin:20px 0;
-  width:100%;
-  padding:0 10px;
-  overflow:hidden;
-}
-
-.digit-box {
-  width:50px;
-  height:50px;
-  min-width:50px;
-  border:3px solid var(--ocean-surf);
-  border-radius: var(--radius-sm);
-  font-size:1.5rem;
-  font-weight:800;
-  text-align:center;
-  background: rgba(255,255,255,0.1);
-  color: var(--white);
-  font-family:"Nunito", sans-serif;
-  transition: all 0.2s;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-  flex-shrink:1;
-}
-
-.digit-box:hover {
-  border-color: var(--ocean-foam);
-  background: rgba(255,255,255,0.15);
-}
-
-.digit-box.active {
-  border-color: var(--gold);
-  box-shadow: 0 0 16px rgba(255,215,0,0.6);
-  background: rgba(255,215,0,0.2);
-  transform: scale(1.05);
-}
-
-.digit-box.filled {
-  border-color: var(--green-island);
-  background: rgba(46,204,113,0.2);
-  color: var(--green-island);
-}
-
-.digit-box.error {
-  border-color: var(--danger);
-  background: rgba(231,76,60,0.2);
-  color: var(--danger);
-  animation: shake 0.4s ease;
-}
-
-.numpad {
-  display:grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap:8px;
-  margin-top:20px;
-  max-width:400px;
-  margin-left:auto;
-  margin-right:auto;
-}
-
-.numpad-btn {
-  padding:14px;
-  border:2px solid rgba(255,255,255,0.2);
-  border-radius: var(--radius-sm);
-  background: rgba(255,255,255,0.05);
-  color: var(--white);
-  font-weight:700;
-  font-size:1.3rem;
-  cursor:pointer;
-  transition: all 0.2s;
-  font-family:"Nunito", sans-serif;
-}
-
-.numpad-btn:hover {
-  background: rgba(255,255,255,0.12);
-  border-color: var(--ocean-foam);
-}
-
-.numpad-btn:active {
-  transform: scale(0.95);
-}
-
-.numpad-btn.delete {
-  grid-column: span 2;
-  background: rgba(231,76,60,0.15);
-  border-color: var(--danger);
-  color: var(--danger);
-}
-
-.numpad-btn.delete:hover {
-  background: rgba(231,76,60,0.25);
-}
-
-/* ---- CHRONO MODE - TIMER ---- */
-.chrono-big-timer {
-  font-family:"Fredoka One", cursive;
-  font-size:4rem;
-  color: var(--gold);
-  text-shadow: 2px 2px 0 var(--gold-dark);
-  margin:20px 0;
-  font-weight:800;
-}
-
-.chrono-big-timer.danger {
-  color: var(--danger);
-  animation: pulse 0.6s ease infinite;
-}
-
-.chrono-stats {
-  display:grid;
-  grid-template-columns: 1fr 1fr;
-  gap:12px;
-  width:100%;
-  margin:20px 0;
-}
-
-.stat-box {
-  background: rgba(255,255,255,0.08);
-  border: 2px solid rgba(255,255,255,0.15);
-  border-radius: var(--radius-sm);
-  padding:12px;
-  text-align:center;
-}
-
-.stat-label {
-  color: var(--ocean-foam);
-  font-size:0.9rem;
-  margin-bottom:4px;
-}
-
-.stat-value {
-  font-family:"Fredoka One", cursive;
-  color: var(--gold);
-  font-size:1.8rem;
-  font-weight:800;
-}
-
-/* ---- VICTORY SCREEN ---- */
-#s-victory {
-  background: linear-gradient(160deg, var(--ocean-light) 0%, var(--ocean-mid) 50%, var(--ocean-deep) 100%);
-  justify-content:center;
-  padding:20px;
-}
-
-.victory-container {
-  text-align:center;
-  padding:40px 32px;
-  background: rgba(255,255,255,0.08);
-  border: 2px solid rgba(255,215,0,0.3);
-  border-radius: var(--radius);
-  max-width:500px;
-  animation: slideIn 0.6s ease;
-}
-
-.victory-stars {
-  font-size:3rem;
-  margin:16px 0;
-  letter-spacing:8px;
-  animation: pulse 0.8s ease;
-}
-
-.victory-title {
-  font-family:"Fredoka One", cursive;
-  color: var(--gold);
-  font-size:2.2rem;
-  text-shadow: 2px 2px 0 var(--gold-dark);
-  margin:16px 0;
-}
-
-.victory-subtitle {
-  color: var(--ocean-foam);
-  font-size:1.1rem;
-  margin-bottom:20px;
-}
-
-.victory-score {
-  font-family:"Fredoka One", cursive;
-  font-size:2rem;
-  color: var(--gold);
-  margin:16px 0;
-}
-
-.achievement-card {
-  margin:20px 0;
-  padding:16px;
-  background:rgba(255,215,0,0.2);
-  border:2px solid var(--gold);
-  border-radius:var(--radius-sm);
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-.achievement-emoji {
-  font-size:2.5rem;
-}
-
-.achievement-info {
-  text-align:left;
-}
-
-.achievement-name {
-  color:var(--gold);
-  font-weight:700;
-  margin-bottom:4px;
-}
-
-.achievement-desc {
-  color:var(--ocean-foam);
-  font-size:0.85rem;
-}
-
-/* ---- TOAST ---- */
-#toast {
-  position:fixed;
-  bottom:30px;
-  left:50%;
-  transform:translateX(-50%);
-  background: rgba(0,0,0,0.85);
-  color: var(--white);
-  padding:16px 24px;
-  border-radius:50px;
-  font-weight:700;
-  opacity:0;
-  pointer-events:none;
-  transition: opacity 0.3s;
-  z-index:1000;
-}
-
+#toast { position:fixed; bottom:30px; left:50%; transform:translateX(-50%); background: rgba(0,0,0,0.85); color: var(--white); padding:16px 24px; border-radius:50px; font-weight:700; opacity:0; pointer-events:none; transition: opacity 0.3s; z-index:1000; }
 #toast.show { opacity:1; }
 
-/* ---- CONFETTI ---- */
-#confetti-canvas {
-  position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
-  pointer-events:none;
-  z-index:999;
-}
+#confetti-canvas { position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:999; }
 </style>
 </head>
 <body>
 
 <div id="app">
-  <!-- SPLASH SCREEN -->
-  <div id="s-splash" class="screen active">
-    <div class="splash-ship">🏴‍☠️</div>
-    <h1 class="splash-title">MultiplicaApp</h1>
-    <p class="splash-subtitle">¡4 Modos de Multiplicaciones!</p>
-    <button class="btn btn-gold btn-lg" onclick="go('s-name')">¡COMENZAR!</button>
-    <div class="splash-waves"></div>
+  <!-- INTRO SCREEN -->
+  <div id="s-intro" class="screen active">
+    <div class="intro-container">
+      <div class="intro-boat">⛵</div>
+      <h1 class="intro-title">Isla del Tesoro</h1>
+      <p class="intro-subtitle">¡El juego de multiplicaciones más épico!</p>
+      <button class="btn btn-gold btn-lg" onclick="go('s-name')" style="margin-top:40px;">Iniciar Aventura</button>
+    </div>
   </div>
 
-  <!-- NAME SCREEN -->
   <div id="s-name" class="screen">
     <div class="name-card">
       <h2>⚓ Bienvenido</h2>
@@ -1060,28 +224,24 @@ html, body {
     </div>
 
     <div class="modes-grid">
-      <!-- Mode 1: Island -->
       <div class="mode-card" onclick="go('s-map')">
         <span class="mode-emoji">🏝️</span>
         <div class="mode-name">Viaje a la Isla</div>
-        <div class="mode-desc">10 tablas de multiplicar como mapa de tesoro</div>
+        <div class="mode-desc">10 islas temáticas con diferentes tablas</div>
       </div>
 
-      <!-- Mode 2: Advanced -->
       <div class="mode-card" onclick="startMode('advanced')">
         <span class="mode-emoji">📊</span>
         <div class="mode-name">Avanzado</div>
         <div class="mode-desc">Números grandes: 1-5 cifras × 1 cifra</div>
       </div>
 
-      <!-- Mode 3: Chrono -->
       <div class="mode-card" onclick="startMode('chrono')">
         <span class="mode-emoji">⏱️</span>
         <div class="mode-name">Contrarreloj</div>
         <div class="mode-desc">60 segundos para resolver todo lo posible</div>
       </div>
 
-      <!-- Mode 4: Challenge -->
       <div class="mode-card" onclick="startMode('challenge')">
         <span class="mode-emoji">🔧</span>
         <div class="mode-name">Desafío Maestro</div>
@@ -1090,7 +250,31 @@ html, body {
     </div>
   </div>
 
-  <!-- ACHIEVEMENTS SCREEN -->
+  <div id="s-map" class="screen">
+    <div class="map-header">
+      <button class="btn btn-sm btn-ocean map-back-btn" onclick="confirmExit('map')">← Volver</button>
+      <div class="player-stats">
+        <div class="stat-chip">⭐ <span id="total-stars">0</span></div>
+        <div class="stat-chip">🎯 <span id="total-score">0</span></div>
+        <div class="stat-chip">🏆 <span id="total-achievements">0</span></div>
+      </div>
+    </div>
+    <h1 class="map-title">🗺️ Elige tu Isla</h1>
+    <div class="islands-grid" id="islands-grid"></div>
+  </div>
+
+  <div id="s-tips" class="screen">
+    <div class="tips-header">
+      <button class="btn btn-sm btn-ocean" onclick="confirmExit('tips')">← Volver</button>
+    </div>
+    <div class="tips-container">
+      <div class="tips-emoji" id="tips-emoji"></div>
+      <h2 class="tips-title" id="tips-title"></h2>
+      <div class="tips-content" id="tips-content"></div>
+      <button class="btn btn-gold btn-lg btn-block" onclick="startIslandModeFromTips()">¡COMENZAR!</button>
+    </div>
+  </div>
+
   <div id="s-achievements" class="screen">
     <div class="achievements-header">
       <button class="btn btn-sm btn-ocean" onclick="go('s-menu')">← Volver</button>
@@ -1111,68 +295,28 @@ html, body {
           <div class="stat-number" id="ach-count">0</div>
         </div>
       </div>
-
       <h2 class="achievements-subtitle">Logros Desbloqueados</h2>
       <div class="achievements-grid" id="achievements-grid"></div>
     </div>
   </div>
 
-  <!-- MAP SCREEN (Island Mode) -->
-  <div id="s-map" class="screen">
-    <div class="map-header">
-      <button class="btn btn-sm btn-ocean map-back-btn" onclick="confirmExit('map')">← Volver</button>
-      <div class="player-stats">
-        <div class="stat-chip">⭐ <span id="total-stars">0</span></div>
-        <div class="stat-chip">🎯 <span id="total-score">0</span></div>
-        <div class="stat-chip">🏆 <span id="total-achievements">0</span></div>
-      </div>
-    </div>
-
-    <h1 class="map-title">🗺️ Viaje al Tesoro</h1>
-    <div class="islands-grid" id="islands-grid"></div>
-  </div>
-
-  <!-- TIPS SCREEN -->
-  <div id="s-tips" class="screen">
-    <div class="tips-header">
-      <button class="btn btn-sm btn-ocean" onclick="confirmExit('tips')">← Volver</button>
-    </div>
-    <div class="tips-container">
-      <div class="tips-emoji" id="tips-emoji"></div>
-      <h2 class="tips-title" id="tips-title"></h2>
-      <div class="tips-content" id="tips-content"></div>
-      <button class="btn btn-gold btn-lg btn-block" onclick="startIslandModeFromTips()">¡COMENZAR!</button>
-    </div>
-  </div>
-
-  <!-- QUIZ SCREEN -->
   <div id="s-quiz" class="screen">
     <div class="quiz-header">
       <button class="btn btn-sm btn-ocean" id="quiz-back-btn" onclick="confirmExit('quiz')">← Volver</button>
       <div class="quiz-counter"><span id="quiz-counter">1/10</span></div>
       <div id="quiz-timer" class="quiz-timer" style="display:none;"><span id="timer-display">60</span>s</div>
     </div>
-
     <div class="quiz-container">
       <div id="quiz-sub" class="quiz-sub"></div>
       <div id="quiz-question" class="quiz-question"></div>
       <div id="quiz-score" class="quiz-score"></div>
-
-      <!-- Multiple Choice (Island & Challenge) -->
-      <div id="answer-grid-container">
-        <div id="answer-grid" class="answer-grid"></div>
-      </div>
-
-      <!-- Advanced Mode Input -->
+      <div id="answer-grid-container"><div id="answer-grid" class="answer-grid"></div></div>
       <div id="advanced-container" style="display:none;">
         <div class="advanced-mult-display" id="advanced-mult-display"></div>
         <div class="input-boxes" id="input-boxes"></div>
         <div class="numpad" id="numpad"></div>
         <button class="btn btn-green btn-lg btn-block" onclick="submitAdvanced()" style="margin-top:20px;">Verificar</button>
-        <input type="text" id="hidden-input" class="hidden-input" inputmode="numeric">
       </div>
-
-      <!-- Chrono Mode -->
       <div id="chrono-container" style="display:none;">
         <div class="chrono-big-timer" id="chrono-timer">60</div>
         <div class="chrono-stats">
@@ -1190,7 +334,6 @@ html, body {
     </div>
   </div>
 
-  <!-- VICTORY SCREEN -->
   <div id="s-victory" class="screen">
     <div class="victory-container">
       <div id="victory-stars" class="victory-stars">⭐⭐⭐</div>
@@ -1198,360 +341,132 @@ html, body {
       <p id="victory-subtitle" class="victory-subtitle"></p>
       <div id="victory-score" class="victory-score"></div>
       <div id="achievement-display"></div>
-      <button class="btn btn-gold btn-lg btn-block" id="victory-btn-map" onclick="go('s-menu')" style="margin-top:20px;">Volver al Menú</button>
+      <button class="btn btn-gold btn-lg btn-block" id="victory-btn-map" onclick="go('s-map')" style="margin-top:20px;">Volver al Mapa</button>
     </div>
   </div>
 
-  <!-- CANVAS for confetti -->
   <canvas id="confetti-canvas"></canvas>
-  
-  <!-- TOAST -->
   <div id="toast"></div>
 </div>
 
 <script>
-// ============================================================
-// TABLES & ACHIEVEMENTS DATA
-// ============================================================
-const TABLES = [
-  { id: 1, name: 'Tabla del 1', emoji: '1️⃣' },
-  { id: 2, name: 'Tabla del 2', emoji: '2️⃣' },
-  { id: 3, name: 'Tabla del 3', emoji: '3️⃣' },
-  { id: 4, name: 'Tabla del 4', emoji: '4️⃣' },
-  { id: 5, name: 'Tabla del 5', emoji: '5️⃣' },
-  { id: 6, name: 'Tabla del 6', emoji: '6️⃣' },
-  { id: 7, name: 'Tabla del 7', emoji: '7️⃣' },
-  { id: 8, name: 'Tabla del 8', emoji: '8️⃣' },
-  { id: 9, name: 'Tabla del 9', emoji: '9️⃣' },
-  { id: 10, name: 'Tabla del 10', emoji: '🔟' },
+const ISLANDS = [
+  { id: 1, name: 'Isla Serpiente', emoji: '🐍', multiplier: 1 },
+  { id: 2, name: 'Isla Paloma', emoji: '🕊️', multiplier: 2 },
+  { id: 3, name: 'Isla Tridente', emoji: '🔱', multiplier: 3 },
+  { id: 4, name: 'Isla Diamante', emoji: '💎', multiplier: 4, locked: true },
+  { id: 5, name: 'Isla Estrella', emoji: '⭐', multiplier: 5, locked: true },
+  { id: 6, name: 'Isla Volcán', emoji: '🌋', multiplier: 6, locked: true },
+  { id: 7, name: 'Isla Arcoíris', emoji: '🌈', multiplier: 7, locked: true },
+  { id: 8, name: 'Isla del Pulpo', emoji: '🐙', multiplier: 8, locked: true },
+  { id: 9, name: 'Isla Brújula', emoji: '🧭', multiplier: 9, locked: true },
+  { id: 10, name: 'Isla del Tesoro', emoji: '💰', multiplier: 10, locked: true },
 ];
 
-const TABLE_TIPS = {
-  1: {
-    title: 'Tabla del 1 - ¡La más fácil!',
-    tips: `
-      <h3>💡 Técnica Fundamental</h3>
-      <p>La tabla del 1 es muy simple: <strong>cualquier número multiplicado por 1 es el mismo número</strong>.</p>
-      <h3>📝 Regla de Oro</h3>
-      <ul>
-        <li>1 × cualquier número = ese número</li>
-        <li>1 × 5 = 5</li>
-        <li>1 × 10 = 10</li>
-      </ul>
-      <h3>🎯 Consejo</h3>
-      <p>Esta es la más fácil para ganar confianza. ¡Intenta hacerla sin errores!</p>
-    `
-  },
-  2: {
-    title: 'Tabla del 2 - ¡El doble!',
-    tips: `
-      <h3>💡 Técnica Fundamental</h3>
-      <p>Multiplicar por 2 es lo mismo que <strong>sumar el número dos veces</strong> o encontrar <strong>el doble</strong>.</p>
-      <h3>📝 Regla de Oro</h3>
-      <ul>
-        <li>2 × 3 = 3 + 3 = 6</li>
-        <li>2 × 4 = 4 + 4 = 8</li>
-        <li>2 × 5 = 5 + 5 = 10</li>
-      </ul>
-      <h3>🎯 Consejo</h3>
-      <p>Piensa siempre en "el doble". ¿Cuál es el doble de 7? Muy bien, 14!</p>
-    `
-  },
-  3: {
-    title: 'Tabla del 3 - ¡El triple!',
-    tips: `
-      <h3>💡 Técnica Fundamental</h3>
-      <p>Multiplicar por 3 significa <strong>sumar el número tres veces</strong>.</p>
-      <h3>📝 Regla de Oro</h3>
-      <ul>
-        <li>3 × 2 = 2 + 2 + 2 = 6</li>
-        <li>3 × 4 = 4 + 4 + 4 = 12</li>
-        <li>3 × 5 = 5 + 5 + 5 = 15</li>
-      </ul>
-      <h3>🎯 Consejo</h3>
-      <p>Una forma fácil: suma el doble al número. Por ejemplo: 3 × 4 = (2 × 4) + 4 = 8 + 4 = 12</p>
-    `
-  },
-  4: {
-    title: 'Tabla del 4 - ¡El doble del doble!',
-    tips: `
-      <h3>💡 Técnica Fundamental</h3>
-      <p>4 es el doble de 2. Así que <strong>multiplica por 2 y luego multiplica el resultado por 2 de nuevo</strong>.</p>
-      <h3>📝 Regla de Oro</h3>
-      <ul>
-        <li>4 × 3 = (2 × 3) × 2 = 6 × 2 = 12</li>
-        <li>4 × 5 = (2 × 5) × 2 = 10 × 2 = 20</li>
-      </ul>
-      <h3>🎯 Consejo</h3>
-      <p>Duplica dos veces: ¿cuál es el doble de 3? 6. ¿Cuál es el doble de 6? 12!</p>
-    `
-  },
-  5: {
-    title: 'Tabla del 5 - ¡Siempre termina en 0 o 5!',
-    tips: `
-      <h3>💡 Técnica Fundamental</h3>
-      <p>Los resultados de la tabla del 5 <strong>siempre terminan en 0 o 5</strong>. Los pares terminan en 0, los impares en 5.</p>
-      <h3>📝 Regla de Oro</h3>
-      <ul>
-        <li>5 × número par = termina en 0</li>
-        <li>5 × número impar = termina en 5</li>
-        <li>5 × 4 = 20 (par)</li>
-        <li>5 × 7 = 35 (impar)</li>
-      </ul>
-      <h3>🎯 Consejo</h3>
-      <p>Otra forma: multiplica por 10 y divide entre 2. Por ejemplo: 5 × 6 = 60 ÷ 2 = 30</p>
-    `
-  },
-  6: {
-    title: 'Tabla del 6 - ¡Combina 2 y 3!',
-    tips: `
-      <h3>💡 Técnica Fundamental</h3>
-      <p>6 = 2 × 3. Puedes <strong>multiplicar por 2 y luego por 3</strong>, o multiplicar por 3 y luego por 2.</p>
-      <h3>📝 Regla de Oro</h3>
-      <ul>
-        <li>6 × 4 = (2 × 4) × 3 = 8 × 3 = 24</li>
-        <li>6 × 5 = (3 × 5) × 2 = 15 × 2 = 30</li>
-      </ul>
-      <h3>🎯 Consejo</h3>
-      <p>Usa la tabla del 3 que ya conoces. 6 × 7 = 3 × 7 × 2 = 21 × 2 = 42</p>
-    `
-  },
-  7: {
-    title: 'Tabla del 7 - ¡La más desafiante!',
-    tips: `
-      <h3>💡 Técnica Fundamental</h3>
-      <p>La tabla del 7 no tiene un patrón fácil. La mejor forma es <strong>memorizar o usar sumas</strong>.</p>
-      <h3>📝 Regla de Oro</h3>
-      <ul>
-        <li>7 × 8 = 7 × 7 + 7 = 49 + 7 = 56</li>
-        <li>7 × 9 = 7 × 8 + 7 = 56 + 7 = 63</li>
-      </ul>
-      <h3>🎯 Consejo</h3>
-      <p>Aprende los resultados clave: 7×7=49, 7×8=56, 7×9=63. Luego practica mucho!</p>
-    `
-  },
-  8: {
-    title: 'Tabla del 8 - ¡El doble del doble del doble!',
-    tips: `
-      <h3>💡 Técnica Fundamental</h3>
-      <p>8 = 2 × 2 × 2. <strong>Duplica tres veces el número</strong>.</p>
-      <h3>📝 Regla de Oro</h3>
-      <ul>
-        <li>8 × 3 = ((2 × 3) × 2) × 2 = (6 × 2) × 2 = 12 × 2 = 24</li>
-        <li>8 × 5 = ((2 × 5) × 2) × 2 = (10 × 2) × 2 = 20 × 2 = 40</li>
-      </ul>
-      <h3>🎯 Consejo</h3>
-      <p>Duplica, duplica, duplica: ¿el doble de 4? 8. ¿El doble de 8? 16. ¿El doble de 16? 32!</p>
-    `
-  },
-  9: {
-    title: 'Tabla del 9 - ¡Tiene un patrón mágico!',
-    tips: `
-      <h3>💡 Técnica Fundamental</h3>
-      <p>La tabla del 9 tiene un patrón sorprendente: <strong>los dígitos siempre suman 9</strong>.</p>
-      <h3>📝 Regla de Oro</h3>
-      <ul>
-        <li>9 × 2 = 18 (1 + 8 = 9)</li>
-        <li>9 × 3 = 27 (2 + 7 = 9)</li>
-        <li>9 × 7 = 63 (6 + 3 = 9)</li>
-      </ul>
-      <h3>🎯 Consejo</h3>
-      <p>También: 9 × n = 10 × n - n. Por ejemplo: 9 × 5 = 50 - 5 = 45</p>
-    `
-  },
-  10: {
-    title: 'Tabla del 10 - ¡Solo añade un cero!',
-    tips: `
-      <h3>💡 Técnica Fundamental</h3>
-      <p>Multiplicar por 10 es muy simple: <strong>solo añade un cero al final del número</strong>.</p>
-      <h3>📝 Regla de Oro</h3>
-      <ul>
-        <li>10 × 3 = 30</li>
-        <li>10 × 7 = 70</li>
-        <li>10 × 9 = 90</li>
-      </ul>
-      <h3>🎯 Consejo</h3>
-      <p>¡La más fácil después de la tabla del 1! Felicidades, ¡ya dominas casi todas!</p>
-    `
-  },
+const ISLAND_TIPS = {
+  1: { title: 'Isla Serpiente - ¡La más fácil!', tips: '<h3>💡 Técnica</h3><p><strong>Cualquier número × 1 = ese número</strong></p><h3>🎯 Consejo</h3><p>¡Intenta hacerla sin errores!</p>' },
+  2: { title: 'Isla Paloma - ¡El doble!', tips: '<h3>💡 Técnica</h3><p><strong>Sumar el número dos veces o el doble</strong></p><h3>🎯 Consejo</h3><p>¿Cuál es el doble de 7? ¡14!</p>' },
+  3: { title: 'Isla Tridente - ¡El triple!', tips: '<h3>💡 Técnica</h3><p><strong>Sumar el número tres veces</strong></p><h3>🎯 Consejo</h3><p>3 × 4 = 8 + 4 = 12</p>' },
+  4: { title: 'Isla Diamante - ¡Doble del doble!', tips: '<h3>💡 Técnica</h3><p><strong>Duplica dos veces</strong></p><h3>🎯 Consejo</h3><p>¿Doble de 3? 6. ¿Doble de 6? 12!</p>' },
+  5: { title: 'Isla Estrella - ¡Siempre 0 o 5!', tips: '<h3>💡 Técnica</h3><p><strong>Siempre termina en 0 o 5</strong></p><h3>🎯 Consejo</h3><p>5 × 6 = 30, 5 × 7 = 35</p>' },
+  6: { title: 'Isla Volcán - ¡Combina 2 y 3!', tips: '<h3>💡 Técnica</h3><p><strong>6 = 2 × 3</strong></p><h3>🎯 Consejo</h3><p>6 × 7 = 21 × 2 = 42</p>' },
+  7: { title: 'Isla Arcoíris - ¡La más desafiante!', tips: '<h3>💡 Técnica</h3><p><strong>Memoriza o usa sumas</strong></p><h3>🎯 Consejo</h3><p>7×7=49, 7×8=56, 7×9=63</p>' },
+  8: { title: 'Isla del Pulpo - ¡Triple duplica!', tips: '<h3>💡 Técnica</h3><p><strong>Duplica tres veces</strong></p><h3>🎯 Consejo</h3><p>¿Doble de 4? 8. ¿Doble de 8? 16. ¿Doble de 16? 32!</p>' },
+  9: { title: 'Isla Brújula - ¡Patrón mágico!', tips: '<h3>💡 Técnica</h3><p><strong>Los dígitos siempre suman 9</strong></p><h3>🎯 Consejo</h3><p>9 × 5 = 45 (4+5=9)</p>' },
+  10: { title: 'Isla del Tesoro - ¡Solo añade un cero!', tips: '<h3>💡 Técnica</h3><p><strong>Solo añade un cero al final</strong></p><h3>🎯 Consejo</h3><p>10 × 7 = 70, 10 × 9 = 90</p>' },
 };
 
 const ACHIEVEMENTS = [
-  { id: 'first_table', name: '🎯 Primer Paso', desc: 'Completa tu primera tabla' },
-  { id: 'perfect_table', name: '⭐ Perfección', desc: 'Consigue 3 estrellas en una tabla' },
-  { id: 'three_tables', name: '🚀 Expedición', desc: 'Completa 3 tablas' },
-  { id: 'all_tables', name: '👑 Maestro de Tablas', desc: 'Completa todas las tablas' },
-  { id: 'speedrun', name: '⚡ Rayo', desc: 'Completa una tabla perfecta en menos de 30s' },
+  { id: 'first_island', name: '🎯 Primer Paso', desc: 'Completa tu primera isla' },
+  { id: 'perfect_island', name: '⭐ Perfección', desc: 'Consigue 3 estrellas en una isla' },
+  { id: 'three_islands', name: '🚀 Expedición', desc: 'Completa 3 islas' },
+  { id: 'all_islands', name: '👑 Maestro del Archipiélago', desc: 'Completa todas las islas' },
+  { id: 'speedrun', name: '⚡ Rayo', desc: 'Completa una isla perfecta en menos de 30s' },
 ];
 
-// ============================================================
-// STATE & PERSISTENCE
-// ============================================================
-let state = {
-  playerName: '',
-  totalPoints: 0,
-  totalStars: 0,
-  achievements: [],
-  tables: {},
-};
+let state = { playerName: '', totalPoints: 0, totalStars: 0, achievements: [], islands: {} };
 
 function loadState() {
-  TABLES.forEach(t => {
-    if (!state.tables[t.id]) {
-      state.tables[t.id] = { stars: 0, bestScore: 0, completed: false };
-    }
-  });
-
+  ISLANDS.forEach(i => { if (!state.islands[i.id]) state.islands[i.id] = { stars: 0, bestScore: 0, completed: false }; });
   const saved = localStorage.getItem('multiplicaAppState');
   if (saved) {
-    const savedState = JSON.parse(saved);
-    state = { ...state, ...savedState };
-    TABLES.forEach(t => {
-      if (!state.tables[t.id]) {
-        state.tables[t.id] = { stars: 0, bestScore: 0, completed: false };
-      }
-    });
+    const s = JSON.parse(saved);
+    state = { ...state, ...s };
+    ISLANDS.forEach(i => { if (!state.islands[i.id]) state.islands[i.id] = { stars: 0, bestScore: 0, completed: false }; });
   }
   saveState();
 }
 
-function saveState() {
-  localStorage.setItem('multiplicaAppState', JSON.stringify(state));
+function saveState() { localStorage.setItem('multiplicaAppState', JSON.stringify(state)); }
+
+function getIslandState(islandId) {
+  if (!state.islands[islandId]) state.islands[islandId] = { stars: 0, bestScore: 0, completed: false };
+  return state.islands[islandId];
 }
 
-function getTableState(tableId) {
-  if (!state.tables[tableId]) {
-    state.tables[tableId] = { stars: 0, bestScore: 0, completed: false };
-  }
-  return state.tables[tableId];
-}
-
-// ============================================================
-// SCREEN NAVIGATION
-// ============================================================
 function go(screenId) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById(screenId).classList.add('active');
-  
-  if (screenId === 's-map') {
-    renderMap();
-  } else if (screenId === 's-menu') {
-    document.getElementById('menu-player-name').textContent = state.playerName ? '👋 Hola, ' + state.playerName : '';
-  } else if (screenId === 's-achievements') {
-    renderAchievements();
-  }
+  if (screenId === 's-map') renderMap();
+  else if (screenId === 's-menu') document.getElementById('menu-player-name').textContent = state.playerName ? '👋 Hola, ' + state.playerName : '';
+  else if (screenId === 's-achievements') renderAchievements();
 }
 
 function saveName() {
-  const input = document.getElementById('player-name-input');
-  const name = input.value.trim();
-  if (name.length > 0) {
-    state.playerName = name;
-    saveState();
-    go('s-menu');
-  } else {
-    showToast('¡Escribe tu nombre primero!');
-  }
+  const name = document.getElementById('player-name-input').value.trim();
+  if (name.length > 0) { state.playerName = name; saveState(); go('s-menu'); }
+  else showToast('¡Escribe tu nombre primero!');
 }
 
-// ============================================================
-// ACHIEVEMENTS RENDERING
-// ============================================================
 function renderAchievements() {
   document.getElementById('ach-total-stars').textContent = state.totalStars || 0;
   document.getElementById('ach-total-points').textContent = state.totalPoints || 0;
   document.getElementById('ach-count').textContent = (state.achievements && state.achievements.length) || 0;
-
   const grid = document.getElementById('achievements-grid');
   grid.innerHTML = '';
-
   ACHIEVEMENTS.forEach(ach => {
     const earned = state.achievements && state.achievements.includes(ach.id);
     const item = document.createElement('div');
     item.className = 'achievement-item' + (earned ? '' : ' locked');
-    
     const emoji = ach.name.split(' ')[0];
-    
-    item.innerHTML = `
-      <div class="achievement-icon">${emoji}</div>
-      <div class="achievement-item-name">${ach.name}</div>
-      <div class="achievement-item-desc">${ach.desc}</div>
-    `;
-    
+    item.innerHTML = `<div class="achievement-icon">${emoji}</div><div class="achievement-item-name">${ach.name}</div><div class="achievement-item-desc">${ach.desc}</div>`;
     grid.appendChild(item);
   });
 }
 
-// ============================================================
-// MAP RENDERING
-// ============================================================
 function renderMap() {
   document.getElementById('total-stars').textContent = state.totalStars || 0;
   document.getElementById('total-score').textContent = state.totalPoints || 0;
   document.getElementById('total-achievements').textContent = (state.achievements && state.achievements.length) || 0;
-
   const grid = document.getElementById('islands-grid');
   grid.innerHTML = '';
-
-  TABLES.forEach((table, idx) => {
-    const tState = getTableState(table.id);
-    const prevCompleted = idx === 0 ? true : getTableState(TABLES[idx - 1].id).completed;
+  ISLANDS.forEach((island, idx) => {
+    const iState = getIslandState(island.id);
+    const prevCompleted = idx === 0 ? true : getIslandState(ISLANDS[idx - 1].id).completed;
     const locked = !prevCompleted;
-    
     const card = document.createElement('div');
     card.className = 'island-card' + (locked ? ' locked' : '');
-    card.onclick = () => !locked && showTips(table.id);
-    
-    const starsEmoji = tState.stars > 0 
-      ? '⭐'.repeat(tState.stars) + '☆'.repeat(3 - tState.stars)
-      : '☆☆☆';
-    
-    card.innerHTML = `
-      <div class="island-emoji">${table.emoji}</div>
-      <div class="island-name">${table.name}</div>
-      <div class="island-desc">${locked ? '🔒 Bloqueada' : ''}</div>
-      <div class="island-stars">${starsEmoji}</div>
-      <div class="island-score">${tState.bestScore > 0 ? tState.bestScore + ' pts' : 'No iniciada'}</div>
-    `;
-    
+    card.onclick = () => !locked && showTips(island.id);
+    const starsEmoji = iState.stars > 0 ? '⭐'.repeat(iState.stars) + '☆'.repeat(3 - iState.stars) : '☆☆☆';
+    card.innerHTML = `<div class="island-lock">🔒</div><div class="island-emoji">${island.emoji}</div><div class="island-multiplier">×${island.multiplier}</div><div class="island-name">${island.name}</div><div class="island-stars">${starsEmoji}</div><div class="island-score">${iState.bestScore > 0 ? iState.bestScore + ' pts' : 'No iniciada'}</div>`;
     grid.appendChild(card);
   });
 }
 
-// ============================================================
-// QUIZ STATE
-// ============================================================
-let quizMode = 'island';
-let currentTableId = 0;
-let quizQuestions = [];
-let quizCurrent = 0;
-let quizScore = 0;
-let quizAnswered = false;
-let quizStartTime = 0;
-let chronoTimeLeft = 60;
-let chronoInterval = null;
-let chronoCorrect = 0;
-let chronoTotal = 0;
-let advancedAnswer = '';
-let advancedInputs = [];
-let currentAdvancedIndex = 0;
+let quizMode = 'island', currentIslandId = 0, quizQuestions = [], quizCurrent = 0, quizScore = 0, quizAnswered = false, quizStartTime = 0, chronoTimeLeft = 60, chronoInterval = null, chronoCorrect = 0, chronoTotal = 0, advancedAnswer = '', advancedInputs = [], currentAdvancedIndex = 0;
 
-// ============================================================
-// GENERATE QUESTIONS
-// ============================================================
-function generateIslandQuestions(tableId, count = 10) {
+function generateIslandQuestions(islandId, count = 10) {
   const questions = [];
+  const mult = islandId;
   for (let i = 0; i < count; i++) {
-    const a = tableId;
     const b = Math.floor(Math.random() * 10) + 1;
-    questions.push({ a, b, answer: a * b });
+    questions.push({ a: mult, b, answer: mult * b });
   }
   return questions;
 }
 
 function generateQuestions(mode, count = 10) {
   const questions = [];
-  
   if (mode === 'advanced') {
     for (let i = 0; i < count; i++) {
       const a = Math.floor(Math.random() * 99999) + 1;
@@ -1559,7 +474,7 @@ function generateQuestions(mode, count = 10) {
       questions.push({ a, b, answer: a * b });
     }
   } else if (mode === 'chrono') {
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < 1000; i++) {
       const a = Math.floor(Math.random() * 9) + 1;
       const b = Math.floor(Math.random() * 9) + 1;
       questions.push({ a, b, answer: a * b });
@@ -1574,7 +489,6 @@ function generateQuestions(mode, count = 10) {
       questions.push({ a, b, answer, missing });
     }
   }
-  
   return questions;
 }
 
@@ -1592,43 +506,28 @@ function generateWrongAnswers(correct, count = 3) {
   return Array.from(wrongs);
 }
 
-// ============================================================
-// TIPS SCREEN
-// ============================================================
-function showTips(tableId) {
-  currentTableId = tableId;
-  const tips = TABLE_TIPS[tableId];
-  const table = TABLES.find(t => t.id === tableId);
-  
-  document.getElementById('tips-emoji').textContent = table.emoji;
+function showTips(islandId) {
+  currentIslandId = islandId;
+  const tips = ISLAND_TIPS[islandId];
+  const island = ISLANDS.find(i => i.id === islandId);
+  document.getElementById('tips-emoji').textContent = island.emoji;
   document.getElementById('tips-title').textContent = tips.title;
   document.getElementById('tips-content').innerHTML = tips.tips;
-  
   go('s-tips');
 }
 
 function startIslandModeFromTips() {
-  startIslandMode(currentTableId);
-}
-
-// ============================================================
-// START MODES
-// ============================================================
-function startIslandMode(tableId) {
   quizMode = 'island';
-  currentTableId = tableId;
-  quizQuestions = generateIslandQuestions(tableId);
+  quizQuestions = generateIslandQuestions(currentIslandId);
   quizCurrent = 0;
   quizScore = 0;
   quizAnswered = false;
   quizStartTime = Date.now();
-
   document.getElementById('answer-grid-container').style.display = 'block';
   document.getElementById('advanced-container').style.display = 'none';
   document.getElementById('chrono-container').style.display = 'none';
   document.getElementById('quiz-timer').style.display = 'none';
   document.getElementById('quiz-back-btn').style.display = 'inline-flex';
-
   go('s-quiz');
   renderQuestion();
 }
@@ -1642,13 +541,11 @@ function startMode(mode) {
   chronoCorrect = 0;
   chronoTotal = 0;
   chronoTimeLeft = 60;
-
   document.getElementById('answer-grid-container').style.display = 'block';
   document.getElementById('advanced-container').style.display = 'none';
   document.getElementById('chrono-container').style.display = 'none';
   document.getElementById('quiz-timer').style.display = 'none';
   document.getElementById('quiz-back-btn').style.display = 'inline-flex';
-
   if (mode === 'advanced') {
     document.getElementById('answer-grid-container').style.display = 'none';
     document.getElementById('advanced-container').style.display = 'block';
@@ -1658,29 +555,24 @@ function startMode(mode) {
     document.getElementById('quiz-timer').style.display = 'flex';
     startChronoTimer();
   }
-
   go('s-quiz');
   renderQuestion();
 }
 
-// ============================================================
-// RENDER QUESTION
-// ============================================================
 function renderQuestion() {
   if (quizCurrent >= quizQuestions.length) {
-    if (quizMode === 'chrono' && chronoInterval) clearInterval(chronoInterval);
-    showVictory();
-    return;
+    if (quizMode !== 'chrono') {
+      if (quizMode === 'chrono' && chronoInterval) clearInterval(chronoInterval);
+      showVictory();
+      return;
+    }
   }
-
-  const total = quizQuestions.length;
+  const total = quizMode === 'chrono' ? '∞' : quizQuestions.length;
   document.getElementById('quiz-counter').textContent = (quizCurrent + 1) + ' / ' + total;
-
   const q = quizQuestions[quizCurrent];
-  
   if (quizMode === 'island') {
-    const table = TABLES.find(t => t.id === currentTableId);
-    document.getElementById('quiz-sub').textContent = `${table.emoji} ${table.name}`;
+    const island = ISLANDS.find(i => i.id === currentIslandId);
+    document.getElementById('quiz-sub').textContent = `${island.emoji} ${island.name}`;
     document.getElementById('quiz-question').textContent = q.a + ' × ' + q.b + ' = ?';
     document.getElementById('quiz-score').textContent = '⭐ ' + quizScore;
     renderIslandAnswers(q);
@@ -1698,19 +590,14 @@ function renderQuestion() {
     document.getElementById('quiz-score').textContent = '⭐ ' + quizScore;
     renderChallengeQuestion(q);
   }
-
   quizAnswered = false;
 }
 
-// ============================================================
-// ISLAND MODE ANSWERS
-// ============================================================
 function renderIslandAnswers(q) {
   const wrongs = generateWrongAnswers(q.answer);
   const options = [q.answer, ...wrongs].sort(() => Math.random() - 0.5);
   const grid = document.getElementById('answer-grid');
   grid.innerHTML = '';
-  
   options.forEach(opt => {
     const btn = document.createElement('button');
     btn.className = 'answer-btn';
@@ -1725,36 +612,24 @@ function answerQuestion(chosen, correct, btn) {
   quizAnswered = true;
   const allBtns = document.querySelectorAll('.answer-btn');
   allBtns.forEach(b => b.disabled = true);
-
   if (chosen === correct) {
     btn.classList.add('correct');
     quizScore += 1;
     showToast('¡Correcto! +1 ⭐');
   } else {
     btn.classList.add('wrong');
-    allBtns.forEach(b => {
-      if (parseInt(b.textContent) === correct) b.classList.add('correct');
-    });
+    allBtns.forEach(b => { if (parseInt(b.textContent) === correct) b.classList.add('correct'); });
     showToast('Casi... la respuesta era ' + correct);
   }
-
-  setTimeout(() => {
-    quizCurrent++;
-    renderQuestion();
-  }, 900);
+  setTimeout(() => { quizCurrent++; renderQuestion(); }, 900);
 }
 
-// ============================================================
-// ADVANCED MODE
-// ============================================================
 function renderAdvancedInput(q) {
   advancedAnswer = String(q.answer);
   advancedInputs = [];
   currentAdvancedIndex = 0;
-  
   const display = document.getElementById('advanced-mult-display');
   display.innerHTML = '';
-  
   const line1 = document.createElement('div');
   line1.className = 'mult-line';
   const nums1 = document.createElement('div');
@@ -1767,7 +642,6 @@ function renderAdvancedInput(q) {
   }
   line1.appendChild(nums1);
   display.appendChild(line1);
-  
   const line2 = document.createElement('div');
   line2.className = 'mult-line operator';
   const nums2 = document.createElement('div');
@@ -1780,14 +654,11 @@ function renderAdvancedInput(q) {
   }
   line2.appendChild(nums2);
   display.appendChild(line2);
-  
   const line3 = document.createElement('div');
   line3.className = 'mult-line equals';
   display.appendChild(line3);
-  
   const container = document.getElementById('input-boxes');
   container.innerHTML = '';
-  
   for (let i = 0; i < advancedAnswer.length; i++) {
     const box = document.createElement('div');
     box.className = 'digit-box';
@@ -1797,7 +668,6 @@ function renderAdvancedInput(q) {
     container.appendChild(box);
     advancedInputs.push('');
   }
-  
   const numpad = document.getElementById('numpad');
   numpad.innerHTML = '';
   for (let i = 1; i <= 9; i++) {
@@ -1812,13 +682,11 @@ function renderAdvancedInput(q) {
   btn0.textContent = '0';
   btn0.onclick = () => addDigit(0);
   numpad.appendChild(btn0);
-  
   const btnDel = document.createElement('button');
   btnDel.className = 'numpad-btn delete';
   btnDel.textContent = '⌫ Borrar';
   btnDel.onclick = () => deleteDigit();
   numpad.appendChild(btnDel);
-  
   setTimeout(() => focusBox(0), 100);
 }
 
@@ -1826,11 +694,8 @@ function focusBox(index) {
   currentAdvancedIndex = index;
   const boxes = document.querySelectorAll('.digit-box');
   boxes.forEach((box, i) => {
-    if (i === index) {
-      box.classList.add('active');
-    } else {
-      box.classList.remove('active');
-    }
+    if (i === index) box.classList.add('active');
+    else box.classList.remove('active');
   });
 }
 
@@ -1838,9 +703,7 @@ function addDigit(digit) {
   if (currentAdvancedIndex < advancedAnswer.length) {
     advancedInputs[currentAdvancedIndex] = String(digit);
     updateAdvancedDisplay();
-    if (currentAdvancedIndex < advancedAnswer.length - 1) {
-      focusBox(currentAdvancedIndex + 1);
-    }
+    if (currentAdvancedIndex < advancedAnswer.length - 1) focusBox(currentAdvancedIndex + 1);
   }
 }
 
@@ -1873,13 +736,11 @@ function updateAdvancedDisplay() {
 function submitAdvanced() {
   if (quizAnswered) return;
   quizAnswered = true;
-  
   const userAnswer = advancedInputs.join('');
   const correct = advancedAnswer;
   const boxes = document.querySelectorAll('.digit-box');
   const btn = document.querySelector('button[onclick="submitAdvanced()"]');
   btn.disabled = true;
-  
   if (userAnswer === correct) {
     boxes.forEach(box => box.classList.remove('error'));
     quizScore += 1;
@@ -1888,34 +749,22 @@ function submitAdvanced() {
     boxes.forEach(box => box.classList.add('error'));
     showToast('Respuesta: ' + correct);
   }
-  
-  setTimeout(() => {
-    quizCurrent++;
-    renderQuestion();
-  }, 1200);
+  setTimeout(() => { quizCurrent++; renderQuestion(); }, 1200);
 }
 
-// ============================================================
-// CHRONO MODE
-// ============================================================
 function startChronoTimer() {
   chronoTimeLeft = 60;
   chronoCorrect = 0;
   chronoTotal = 0;
-  
   chronoInterval = setInterval(() => {
     chronoTimeLeft--;
-    const timerEl = document.getElementById('timer-display');
+    document.getElementById('timer-display').textContent = chronoTimeLeft;
     const chronoEl = document.getElementById('chrono-timer');
-    
-    timerEl.textContent = chronoTimeLeft;
     chronoEl.textContent = chronoTimeLeft;
-    
     if (chronoTimeLeft <= 10) {
       chronoEl.classList.add('danger');
       document.getElementById('quiz-timer').classList.add('warning');
     }
-    
     if (chronoTimeLeft <= 0) {
       clearInterval(chronoInterval);
       endChrono();
@@ -1928,7 +777,6 @@ function renderChronoAnswers(q) {
   const options = [q.answer, ...wrongs].sort(() => Math.random() - 0.5);
   const grid = document.getElementById('chrono-answer-grid');
   grid.innerHTML = '';
-  
   options.forEach(opt => {
     const btn = document.createElement('button');
     btn.className = 'answer-btn';
@@ -1943,25 +791,22 @@ function answerChronoQuestion(chosen, correct, btn) {
   quizAnswered = true;
   const allBtns = document.querySelectorAll('#chrono-answer-grid .answer-btn');
   allBtns.forEach(b => b.disabled = true);
-
   chronoTotal++;
-  
   if (chosen === correct) {
     btn.classList.add('correct');
     chronoCorrect++;
     showToast('✓');
   } else {
     btn.classList.add('wrong');
-    allBtns.forEach(b => {
-      if (parseInt(b.textContent) === correct) b.classList.add('correct');
-    });
+    allBtns.forEach(b => { if (parseInt(b.textContent) === correct) b.classList.add('correct'); });
   }
-
   setTimeout(() => {
     quizCurrent++;
-    if (chronoTimeLeft > 0) {
-      renderQuestion();
+    if (quizCurrent >= quizQuestions.length) {
+      quizQuestions = generateQuestions('chrono');
+      quizCurrent = 0;
     }
+    if (chronoTimeLeft > 0) renderQuestion();
   }, 300);
 }
 
@@ -1970,30 +815,18 @@ function endChrono() {
   showVictory();
 }
 
-// ============================================================
-// CHALLENGE MODE
-// ============================================================
 function renderChallengeQuestion(q) {
   const { a, b, answer, missing } = q;
-  
   let questionText = '';
-  if (missing === 'a') {
-    questionText = '? × ' + b + ' = ' + answer;
-  } else if (missing === 'b') {
-    questionText = a + ' × ? = ' + answer;
-  } else {
-    questionText = a + ' × ' + b + ' = ?';
-  }
-  
+  if (missing === 'a') questionText = '? × ' + b + ' = ' + answer;
+  else if (missing === 'b') questionText = a + ' × ? = ' + answer;
+  else questionText = a + ' × ' + b + ' = ?';
   document.getElementById('quiz-question').textContent = questionText;
-  
   const wrongs = generateWrongAnswers(missing === 'answer' ? answer : (missing === 'a' ? a : b));
   const correct = missing === 'answer' ? answer : (missing === 'a' ? a : b);
   const options = [correct, ...wrongs].sort(() => Math.random() - 0.5);
-  
   const grid = document.getElementById('answer-grid');
   grid.innerHTML = '';
-  
   options.forEach(opt => {
     const btn = document.createElement('button');
     btn.className = 'answer-btn';
@@ -2003,55 +836,38 @@ function renderChallengeQuestion(q) {
   });
 }
 
-// ============================================================
-// EXIT CONFIRMATION
-// ============================================================
 function confirmExit(from) {
   if (confirm('¿Seguro que quieres volver? Se perderá el progreso.')) {
     if (quizMode === 'chrono' && chronoInterval) clearInterval(chronoInterval);
-    if (from === 'map') {
-      go('s-menu');
-    } else if (from === 'quiz') {
-      if (quizMode === 'island') {
-        go('s-map');
-      } else {
-        go('s-menu');
-      }
-    }
+    if (from === 'map') go('s-menu');
+    else if (from === 'quiz') {
+      if (quizMode === 'island') go('s-map');
+      else go('s-menu');
+    } else if (from === 'tips') go('s-map');
   }
 }
 
-// ============================================================
-// VICTORY
-// ============================================================
 function showVictory() {
   let maxScore = quizQuestions.length;
   if (quizMode === 'chrono') maxScore = chronoTotal;
-  
   const pct = quizMode === 'chrono' ? (chronoCorrect / (chronoTotal || 1)) : (quizScore / maxScore);
   let stars = 1;
   if (pct >= 0.6) stars = 2;
   if (pct >= 0.9) stars = 3;
-
   const starsEmoji = '⭐'.repeat(stars) + '☆'.repeat(3 - stars);
   document.getElementById('victory-stars').textContent = starsEmoji;
-
   const titles = ['¡Buen intento!', '¡Muy bien!', '¡Increíble!'];
   document.getElementById('victory-title').textContent = titles[stars - 1];
-
   let modeStr = '';
   let victoryMsg = '';
-  
   if (quizMode === 'island') {
-    const table = TABLES.find(t => t.id === currentTableId);
-    modeStr = table.name;
+    const island = ISLANDS.find(i => i.id === currentIslandId);
+    modeStr = island.name;
     victoryMsg = 'Has conseguido ' + stars + ' estrella' + (stars !== 1 ? 's' : '') + ' en ' + modeStr;
-    
-    const tState = getTableState(currentTableId);
-    if (stars > tState.stars) tState.stars = stars;
-    if (quizScore > tState.bestScore) tState.bestScore = quizScore;
-    if (stars === 3) tState.completed = true;
-    
+    const iState = getIslandState(currentIslandId);
+    if (stars > iState.stars) iState.stars = stars;
+    if (quizScore > iState.bestScore) iState.bestScore = quizScore;
+    if (stars === 3) iState.completed = true;
     state.totalPoints += quizScore;
     state.totalStars += stars;
     document.getElementById('victory-score').textContent = 'Puntuación: ' + quizScore + ' / ' + maxScore;
@@ -2063,12 +879,14 @@ function showVictory() {
     state.totalStars += stars;
     document.getElementById('victory-score').textContent = victoryMsg;
     document.getElementById('victory-btn-map').textContent = 'Volver al Menú';
+    document.getElementById('victory-btn-map').onclick = function() { go('s-menu'); };
   } else if (quizMode === 'chrono') {
     modeStr = 'Contrarreloj';
     victoryMsg = '⏱️ Resolviste ' + chronoCorrect + ' de ' + chronoTotal + ' en 60 segundos';
     state.totalPoints += chronoCorrect;
     document.getElementById('victory-score').textContent = victoryMsg;
     document.getElementById('victory-btn-map').textContent = 'Volver al Menú';
+    document.getElementById('victory-btn-map').onclick = function() { go('s-menu'); };
   } else if (quizMode === 'challenge') {
     modeStr = 'Desafío Maestro';
     victoryMsg = 'Puntuación: ' + quizScore + ' / ' + maxScore;
@@ -2076,29 +894,20 @@ function showVictory() {
     state.totalStars += stars;
     document.getElementById('victory-score').textContent = victoryMsg;
     document.getElementById('victory-btn-map').textContent = 'Volver al Menú';
+    document.getElementById('victory-btn-map').onclick = function() { go('s-menu'); };
   }
-  
   document.getElementById('victory-subtitle').textContent = victoryMsg;
-
   const newAchievements = checkAchievements();
   const displayAchievement = document.getElementById('achievement-display');
   displayAchievement.innerHTML = '';
-
   if (newAchievements.length > 0) {
     newAchievements.forEach(ach => {
       const card = document.createElement('div');
       card.className = 'achievement-card';
-      card.innerHTML = `
-        <div class="achievement-emoji">${ach.name.split(' ')[0]}</div>
-        <div class="achievement-info">
-          <div class="achievement-name">${ach.name}</div>
-          <div class="achievement-desc">${ach.desc}</div>
-        </div>
-      `;
+      card.innerHTML = `<div class="achievement-emoji">${ach.name.split(' ')[0]}</div><div class="achievement-info"><div class="achievement-name">${ach.name}</div><div class="achievement-desc">${ach.desc}</div></div>`;
       displayAchievement.appendChild(card);
     });
   }
-
   saveState();
   go('s-victory');
   if (stars === 3) launchConfetti();
@@ -2106,36 +915,30 @@ function showVictory() {
 
 function checkAchievements() {
   if (!state.achievements) state.achievements = [];
-  
   const newAchievements = [];
-
-  if (!state.achievements.includes('first_table') && state.totalStars > 0) {
-    const ach = ACHIEVEMENTS.find(a => a.id === 'first_table');
-    state.achievements.push('first_table');
+  if (!state.achievements.includes('first_island') && state.totalStars > 0) {
+    const ach = ACHIEVEMENTS.find(a => a.id === 'first_island');
+    state.achievements.push('first_island');
     newAchievements.push(ach);
   }
-
   if (quizMode === 'island') {
-    if (!state.achievements.includes('perfect_table') && getTableState(currentTableId).stars === 3) {
-      const ach = ACHIEVEMENTS.find(a => a.id === 'perfect_table');
-      state.achievements.push('perfect_table');
+    if (!state.achievements.includes('perfect_island') && getIslandState(currentIslandId).stars === 3) {
+      const ach = ACHIEVEMENTS.find(a => a.id === 'perfect_island');
+      state.achievements.push('perfect_island');
       newAchievements.push(ach);
     }
-
-    const completedTables = TABLES.filter(t => getTableState(t.id).stars >= 1).length;
-    if (!state.achievements.includes('three_tables') && completedTables >= 3) {
-      const ach = ACHIEVEMENTS.find(a => a.id === 'three_tables');
-      state.achievements.push('three_tables');
+    const completedIslands = ISLANDS.filter(i => getIslandState(i.id).stars >= 1).length;
+    if (!state.achievements.includes('three_islands') && completedIslands >= 3) {
+      const ach = ACHIEVEMENTS.find(a => a.id === 'three_islands');
+      state.achievements.push('three_islands');
       newAchievements.push(ach);
     }
-
-    if (!state.achievements.includes('all_tables') && completedTables === 10) {
-      const ach = ACHIEVEMENTS.find(a => a.id === 'all_tables');
-      state.achievements.push('all_tables');
+    if (!state.achievements.includes('all_islands') && completedIslands === 10) {
+      const ach = ACHIEVEMENTS.find(a => a.id === 'all_islands');
+      state.achievements.push('all_islands');
       newAchievements.push(ach);
     }
-
-    if (!state.achievements.includes('speedrun') && getTableState(currentTableId).stars === 3) {
+    if (!state.achievements.includes('speedrun') && getIslandState(currentIslandId).stars === 3) {
       const elapsed = (Date.now() - quizStartTime) / 1000;
       if (elapsed < 30) {
         const ach = ACHIEVEMENTS.find(a => a.id === 'speedrun');
@@ -2144,13 +947,9 @@ function checkAchievements() {
       }
     }
   }
-
   return newAchievements;
 }
 
-// ============================================================
-// TOAST
-// ============================================================
 function showToast(msg) {
   const el = document.getElementById('toast');
   el.textContent = msg;
@@ -2158,32 +957,23 @@ function showToast(msg) {
   setTimeout(() => el.classList.remove('show'), 2000);
 }
 
-// ============================================================
-// CONFETTI
-// ============================================================
 function launchConfetti() {
   const canvas = document.getElementById('confetti-canvas');
   const ctx = canvas.getContext('2d');
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
-
   const pieces = [];
   const colors = ['#ffd700','#ff6b35','#5bb8f5','#2ecc71','#e74c3c','#fff'];
-
   for (let i = 0; i < 120; i++) {
     pieces.push({
-      x: Math.random() * canvas.width,
-      y: -10 - Math.random() * 200,
-      w: 6 + Math.random() * 10,
-      h: 10 + Math.random() * 16,
+      x: Math.random() * canvas.width, y: -10 - Math.random() * 200,
+      w: 6 + Math.random() * 10, h: 10 + Math.random() * 16,
       color: colors[Math.floor(Math.random() * colors.length)],
       rot: Math.random() * Math.PI * 2,
-      vx: (Math.random() - 0.5) * 3,
-      vy: 2 + Math.random() * 4,
+      vx: (Math.random() - 0.5) * 3, vy: 2 + Math.random() * 4,
       vr: (Math.random() - 0.5) * 0.15,
     });
   }
-
   let frames = 0;
   function draw() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -2194,10 +984,7 @@ function launchConfetti() {
       ctx.fillStyle = p.color;
       ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
       ctx.restore();
-      p.x += p.vx;
-      p.y += p.vy;
-      p.rot += p.vr;
-      p.vy += 0.08;
+      p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.vy += 0.08;
     });
     frames++;
     if (frames < 180) requestAnimationFrame(draw);
@@ -2206,21 +993,13 @@ function launchConfetti() {
   draw();
 }
 
-// ============================================================
-// INIT
-// ============================================================
 (function init() {
   loadState();
-
   const continueBtn = document.getElementById('btn-continue');
-  if (state.playerName) {
-    continueBtn.style.display = 'inline-flex';
-  }
-
+  if (state.playerName) continueBtn.style.display = 'inline-flex';
   document.getElementById('player-name-input').addEventListener('keydown', function(e) {
     if (e.key === 'Enter') saveName();
   });
-
   window.addEventListener('resize', function() {
     const canvas = document.getElementById('confetti-canvas');
     canvas.width = window.innerWidth;
