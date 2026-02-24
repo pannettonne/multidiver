@@ -139,6 +139,8 @@ html, body { width:100%; height:100%; font-family: "Nunito", sans-serif; overflo
 .quiz-sub { color: var(--ocean-foam); font-size:1rem; margin-bottom:24px; font-weight:700; }
 .quiz-score { color: var(--gold); font-weight:800; font-size:1.2rem; margin:8px 0 24px; }
 
+.streak-counter { background: rgba(255,215,0,0.2); border: 2px solid var(--gold); border-radius: var(--radius-sm); padding:12px 20px; margin:8px 0 16px; display:inline-block; color: var(--gold); font-weight:800; font-size:1.1rem; }
+
 .answer-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:12px; margin-top:20px; }
 .answer-btn { padding:16px 12px; font-size:1.3rem; font-weight:800; border:3px solid rgba(255,255,255,0.2); border-radius: var(--radius-sm); background: rgba(255,255,255,0.05); color: var(--white); cursor:pointer; transition: all 0.2s; font-family:"Nunito", sans-serif; }
 .answer-btn:hover { background: rgba(255,255,255,0.12); border-color: var(--ocean-foam); }
@@ -310,6 +312,7 @@ html, body { width:100%; height:100%; font-family: "Nunito", sans-serif; overflo
       <div id="quiz-sub" class="quiz-sub"></div>
       <div id="quiz-question" class="quiz-question"></div>
       <div id="quiz-score" class="quiz-score"></div>
+      <div id="streak-display" class="streak-counter" style="display:none;">🔥 Racha: <span id="streak-count">0</span></div>
       <div id="answer-grid-container"><div id="answer-grid" class="answer-grid"></div></div>
       <div id="advanced-container" style="display:none;">
         <div class="advanced-mult-display" id="advanced-mult-display"></div>
@@ -453,7 +456,7 @@ function renderMap() {
   });
 }
 
-let quizMode = 'island', currentIslandId = 0, quizQuestions = [], quizCurrent = 0, quizScore = 0, quizAnswered = false, quizStartTime = 0, chronoTimeLeft = 60, chronoInterval = null, chronoCorrect = 0, chronoTotal = 0, advancedAnswer = '', advancedInputs = [], currentAdvancedIndex = 0;
+let quizMode = 'island', currentIslandId = 0, quizQuestions = [], quizCurrent = 0, quizScore = 0, quizAnswered = false, quizStartTime = 0, chronoTimeLeft = 60, chronoInterval = null, chronoCorrect = 0, chronoTotal = 0, advancedAnswer = '', advancedInputs = [], currentAdvancedIndex = 0, currentStreak = 0;
 
 function generateIslandQuestions(islandId, count = 10) {
   const questions = [];
@@ -522,6 +525,7 @@ function startIslandModeFromTips() {
   quizCurrent = 0;
   quizScore = 0;
   quizAnswered = false;
+  currentStreak = 0;
   quizStartTime = Date.now();
   document.getElementById('answer-grid-container').style.display = 'block';
   document.getElementById('advanced-container').style.display = 'none';
@@ -538,6 +542,7 @@ function startMode(mode) {
   quizCurrent = 0;
   quizScore = 0;
   quizAnswered = false;
+  currentStreak = 0;
   chronoCorrect = 0;
   chronoTotal = 0;
   chronoTimeLeft = 60;
@@ -569,6 +574,14 @@ function renderQuestion() {
   }
   const total = quizMode === 'chrono' ? '∞' : quizQuestions.length;
   document.getElementById('quiz-counter').textContent = (quizCurrent + 1) + ' / ' + total;
+  
+  if (currentStreak > 0) {
+    document.getElementById('streak-display').style.display = 'inline-block';
+    document.getElementById('streak-count').textContent = currentStreak;
+  } else {
+    document.getElementById('streak-display').style.display = 'none';
+  }
+  
   const q = quizQuestions[quizCurrent];
   if (quizMode === 'island') {
     const island = ISLANDS.find(i => i.id === currentIslandId);
@@ -615,10 +628,12 @@ function answerQuestion(chosen, correct, btn) {
   if (chosen === correct) {
     btn.classList.add('correct');
     quizScore += 1;
-    showToast('¡Correcto! +1 ⭐');
+    currentStreak += 1;
+    showToast('¡Correcto! +1 ⭐ 🔥');
   } else {
     btn.classList.add('wrong');
     allBtns.forEach(b => { if (parseInt(b.textContent) === correct) b.classList.add('correct'); });
+    currentStreak = 0;
     showToast('Casi... la respuesta era ' + correct);
   }
   setTimeout(() => { quizCurrent++; renderQuestion(); }, 900);
@@ -744,9 +759,11 @@ function submitAdvanced() {
   if (userAnswer === correct) {
     boxes.forEach(box => box.classList.remove('error'));
     quizScore += 1;
-    showToast('¡Perfecto! +1 ⭐');
+    currentStreak += 1;
+    showToast('¡Perfecto! +1 ⭐ 🔥');
   } else {
     boxes.forEach(box => box.classList.add('error'));
+    currentStreak = 0;
     showToast('Respuesta: ' + correct);
   }
   setTimeout(() => { quizCurrent++; renderQuestion(); }, 1200);
@@ -795,10 +812,13 @@ function answerChronoQuestion(chosen, correct, btn) {
   if (chosen === correct) {
     btn.classList.add('correct');
     chronoCorrect++;
-    showToast('✓');
+    currentStreak += 1;
+    showToast('✓ 🔥');
   } else {
     btn.classList.add('wrong');
     allBtns.forEach(b => { if (parseInt(b.textContent) === correct) b.classList.add('correct'); });
+    currentStreak = 0;
+    showToast('✗');
   }
   setTimeout(() => {
     quizCurrent++;
